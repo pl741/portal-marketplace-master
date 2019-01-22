@@ -1,0 +1,640 @@
+<!--  
+===============LICENSE_START=======================================================
+Acumos Apache-2.0
+===================================================================================
+Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+===================================================================================
+This Acumos software file is distributed by AT&T and Tech Mahindra
+under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+===============LICENSE_END=========================================================
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<section class="description_box">
+	<div class="">
+		<div class="description-content">
+			<div class="description-content-left">
+				<h4 class="inline-block text-bold">{{solution.name}}</h4>
+				<!-- <h4 class="inline-block text-bold">{{name}}</h4> -->
+				<span>| 版本-2.0 </span> <span> | <a ui-sref="modelEdit"
+					ng-show="isUser">编辑</a></span>
+				<!-- ng-show="isUser" -->
+			</div>
+			<div class="description-content-right">
+				<span> <i class="fa fa-star"
+					ng-class="{'fa-star-o': solution.solutionRating == null || solution.solutionRating < 1}"
+					aria-hidden="true"></i> <i class="fa fa-star"
+					ng-class="{'fa-star-o': solution.solutionRating < 2}"
+					aria-hidden="true"></i> <i class="fa fa-star"
+					ng-class="{'fa-star-o': solution.solutionRating < 3}"
+					aria-hidden="true"></i> <i class="fa fa-star"
+					ng-class="{'fa-star-o': solution.solutionRating < 4}"
+					aria-hidden="true"></i> <i class="fa fa-star-o"
+					ng-class="{'fa-star-o': solution.solutionRating < 5}"
+					aria-hidden="true"></i>
+				</span> <span><i class="fa fa-comment" aria-hidden="true"></i><a
+					data-target="#">10 评论</a></span> <span> <a data-target="#">发表评论</a></span> <span><i class="fa fa-eye" aria-hidden="true"></i>176
+					次浏览</span> <span><i class="fa fa-download" aria-hidden="true"></i>{{solution.downloadCount
+					=== null ? 0 : solution.downloadCount}} 已下载</span>
+			</div>
+			<div class="clearfix"></div>
+			<div>
+				<ol class="breadcrumb col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<li><a data-target="#">主页</a></li>
+					<li>{{solution.name}}</li>
+				</ol>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</section>
+<section class="">
+	<section class="model-detail row">
+
+		<div class="tab-panel col-xs-12 col-sm-12 col-md-9 col-lg-9">
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a data-target="#home"
+					aria-controls="home" role="tab" data-toggle="tab"
+					aria-expanded="true"><span class="onlymob"><img
+							src="images/Description.png" alt="" title=""></span>描述</a></li>
+				<li role="presentation" class=""><a data-target="#profile"
+					aria-controls="profile" role="tab" data-toggle="tab"
+					aria-expanded="false"><span class="onlymob"><img
+							src="images/Signature.png" alt="" title=""></span>签名</a></li>
+				<li role="presentation" class=""><a data-target="#messages"
+					aria-controls="messages" role="tab" data-toggle="tab"
+					aria-expanded="false"><span class="onlymob"><img
+							src="images/Documents.png" alt="" title=""></span>文档</a></li>
+				<li role="presentation" class=""><a data-target="#settings"
+					aria-controls="settings" role="tab" data-toggle="tab"
+					aria-expanded="false"><span class="onlymob"><img
+							src="images/Version_History.png" alt="" title=""></span>历史版本</a></li>
+				<!-- <li class="statcontainer" ng-hide="!solution.active"><span>
+						<span class="number">3.6</span> <span class="text">MB</span> <br>
+						<span class="text">Size</span>
+				</span> <span> <span class="number">96</span><br> <span
+						class="text">Lines</span>
+				</span> <span> <span class="number">4</span><br> <span
+						class="text">Inputs</span>
+				</span> <span> <span class="number">2</span><br> <span
+						class="text">Outputs</span>
+				</span></li> -->
+			</ul>
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="home">
+					<div class="detailsummary">
+						<p class="headings">关于模型的介绍</p>
+						<p ng-bind-html="solution.description">
+							<!-- {{solution.description}} -->
+						</p>
+
+					</div>
+					<div class="detailsummary">
+						<p class="headings">图像和视频</p>
+						<div class="imagegallery">
+							<img src="images/imagegallery.jpg" alt="" title="">
+						</div>
+					</div>
+					<div class="detailsummary">
+						<p class="headings">举例</p>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="profile">
+					<div class="detailsummary">
+						<p class="headings">输入</p>
+						<p>* （必填）图像数据API网址，网页（http / https）网址，二进制图像，base64编码图像或数据API网址/网站网址数组。
+							</p>
+						<p>.**（可选）**输出图像位置，如果输入是数组，则输出位置应该是大小相等的数组。</p>
+					</div>
+					<div class="detailsummary">
+						<p class="headings">输出</p>
+						<p>输出图像位置</p>
+						<p>注意：由于算法初始化使得首次调用将算法比顺序调用将花费更长的时间。以下所有调用都会明显加快
+							</p>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="messages">
+					<div class="detailsummary">
+						<p class="headings">
+							支持文件
+							<button class="btn replybtn pull-right">添加</button>
+							<span class="clearfix"></span>
+						</p>
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th></th>
+										<th>文件夹/文件</th>
+										<th>版本</th>
+										<th>修改</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- <tr>
+										<th scope="row"><i class="fa fa-file-word-o"
+											aria-hidden="true"></i></th>
+										<td><a data-target>Document Name 01</a></td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i></td>
+									</tr>
+									<tr>
+										<th scope="row"><i class="fa fa-file-pdf-o"
+											aria-hidden="true"></i></th>
+										<td><a data-target>Document Name 02</a></td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i></td>
+									</tr>
+									<tr>
+										<th scope="row"><i class="fa fa-file-word-o"
+											aria-hidden="true"></i></th>
+										<td><a data-target>Document Name 03</a></td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i></td>
+									</tr>
+									<tr>
+										<th scope="row"><i class="fa fa-file-word-o"
+											aria-hidden="true"></i></th>
+										<td><a data-target>Document Name 04</a></td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i></td>
+									</tr>
+									<tr>
+										<th scope="row"><i class="fa fa-folder"
+											aria-hidden="true"></i></th>
+										<td><a data-target>Folder Name 01</a></td>
+										<td>---</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i></td>
+									</tr> -->
+									<tr ng-repeat="supportingDoc in supportingDocs">
+										<th scope="row"><i class="fa fa-file-word-o"></i></th>
+											<td><a data-target>{{supportingDoc.index}}</a></td>
+										<td></td>
+										<td></td>
+										<td><!-- <i class="fa fa-download" aria-hidden="true" href="/site/binaries/content/assets/solutiondocs/solution/org/{{solution.solutionId}}/{{val}}"></i> --></td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="settings">
+					<div class="detailsummary">
+						<p class="headings">
+							历史版本的解决方案
+							<button class="btn replybtn pull-right">添加新解决方案</button>
+							<span class="clearfix"></span>
+						</p>
+						<div class="table-responsive">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>版本名称</th>
+										<th>版本</th>
+										<th>修改</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><a data-target="#">版本名称 01</a> | 最新</td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i> <a
+											data-target="#">查看详情</a></td>
+									</tr>
+									<tr>
+										<td><a data-target="#">版本名称 02</a></td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i> <a
+											data-target="#">查看详情</a></td>
+									</tr>
+									<tr>
+										<td><a data-target="#">版本名称 03</a></td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i> <a
+											data-target="#">查看详情</a></td>
+									</tr>
+									<tr>
+										<td><a data-target="#">版本名称 04</a></td>
+										<td>v1.0</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i> <a
+											data-target="#">查看详情</a></td>
+									</tr>
+									<tr>
+										<td><a data-target="#">版本名称 05</a></td>
+										<td>---</td>
+										<td>05/21/2017</td>
+										<td><i class="fa fa-download" aria-hidden="true"></i> <a
+											data-target="#">查看详情</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ratemodel">
+				<div>
+					<p class="nameml">评分: {{solution.name}}</p>
+					<div class="socialicon" ng-hide="!solution.active">
+						<span>分享</span>
+						<ul>
+							<li><i class="fa fa-facebook" aria-hidden="true"></i></li>
+							<li><i class="fa fa-linkedin" aria-hidden="true"></i></li>
+							<li><i class="fa fa-google" aria-hidden="true"></i></li>
+							<li><i class="fa fa-github" aria-hidden="true"></i></li>
+						</ul>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="rating">
+					<div>
+						<h3 class="pull-left">
+							<b>21</b>
+						</h3>
+						<!-- <i class="fa fa-star" aria-hidden="true"></i> <i
+								class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star"
+								aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i>
+							<i class="fa fa-star-o" aria-hidden="true"></i> -->
+						<angular-star-rating max="maxValue" value='ratingValue'
+							active='solution.active' hover='changeOnHover'
+							is-readonly='isReadonly'></angular-star-rating>
+					</div>
+					<div class="clearfix"></div>
+					<div class="starratings">
+						<span>5 星</span><span class="avarge"></span><span class="badge">42</span>
+					</div>
+					<div class="starratings">
+						<span>4 星</span><span class="avarge"></span><span class="badge">12</span>
+					</div>
+					<div class="starratings">
+						<span>3 星</span><span class="avarge"></span><span class="badge">2</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<hr>
+				<div class="discussion">
+
+					<p class="pull-left">讨论 (10)</p>
+					<ul>
+						<li><a data-target="#" class="active">最新</a></li>
+						<li><a data-target="#">旧文</a></li>
+						<li><a data-target="#">相关</a></li>
+					</ul>
+					<div class="clearfix"></div>
+					<div class="imageholder">
+						<img src="images/profile-icon-01-48X48.png" alt="" title="user">
+					</div>
+					<div class="chatwindow">
+						<b>Mike Smith</b> | 今天 4:21pm - 12.05.2017
+						<p>Lorem Ipsum只是印刷和排版行业的虚拟文本。</p>
+						<button class="btn replybtn" ng-hide="!solution.active">答复</button>
+					</div>
+					<div class="chatreply">
+						<div class="imageholder">
+							<img src="images/profile-icon-01-48X48.png" alt="" title="user">
+						</div>
+						<div class="chatwindow">
+							<b>John Smith</b> | 今天 4:21pm - 12.05.2017
+							<p>Lorem Ipsum只是印刷和排版行业的虚拟文本。Lorem Ipsum只是印刷和排版行业的虚拟文本。</p>
+						</div>
+					</div>
+					<div class="post" ng-hide="!solution.active">
+						<form class="form-inline">
+							<div class="form-group">
+								<input type="text" class="form-control" id="text1"
+									placeholder="Type your post">
+							</div>
+							<button type="submit" class="btn btn-post">发布</button>
+						</form>
+					</div>
+					<hr>
+					<div class="imageholder">
+						<img src="images/profile-icon-01-48X48.png" alt="" title="user">
+					</div>
+					<div class="chatwindow">
+						<b>John Smith</b> | 今天 4:21pm - 12.05.2017
+						<p>Lorem Ipsum只是印刷和排版行业的虚拟文本。</p>
+						<button class="btn replybtn" type="submit"
+							ng-hide="!solution.active">答复</button>
+					</div>
+					<div class="add-comment" ng-hide="!solution.active">
+						<form>
+							<div class="form-group">
+								<label for="comment">添加评论</label> <input type="text"
+									class="form-control" id="exampleInputtext"
+									placeholder="Add your comments">
+							</div>
+							<button type="submit" class="btn btn-comment">发布评论</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+			<div class="leftsection">
+				<div class="leftcontent">
+					<div class="imageholder">
+						<img src="images/profile-icon-01-48X48.png" alt="" title="user">
+					</div>
+					<div class="chatwindow">
+						<p>
+							<b>被{{solution.ownerName}}创建</b>
+						</p>
+						<p>{{solution.created | date:'MM/dd/yyyy' }}创建</p>
+
+						<p>{{solution.modified | date:'MM/dd/yyyy' }}发布</p>
+					</div>
+				</div>
+				<hr class="hr2">
+				<div class="boxinner2">
+					<!-- <label>Description</label>
+						<hr class="hr2">
+						<p ng-bind-html="solution.description">
+						{{solution.description}}
+						</p>
+						 
+						<br> -->
+					<div class="text-center">
+						<!-- <a ng-href="Download.txt" download="Download.txt" type="button" class="btn btn-default btn-long">Download</a> -->
+						<a data-toggle="modal" data-target="#myModal" type="button"
+							class="btn btn-default btn-long" ng-disabled="!solution.active">下载</a>
+						<div>
+							<label class="normallbl ">版本 {{versionId}} | 6
+								次被下载</label>
+						</div>
+					</div>
+					<br>
+					<div class="deploy">
+						<div class="btn-group">
+							<button type="button"
+								class="btn btn-default btn-deploy"
+								ng-click="$root.showPrerenderedDialog($event)"
+								aria-haspopup="true"
+								aria-expanded="false" ng-disabled="!solution.active">
+								部署到云
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#"><img src="images/mazure.png" alt=""
+										title=""></a></li>
+								<li><a href="#"><img src="images/cloud.png" alt=""
+										title=""></a></li>
+								<li><a href="#"><img src="images/rackspace.png" alt=""
+										title=""></a></li>
+								<li><a href="#"><img src="images/amazoncloud.png"
+										alt="" title=""></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="tagsection boxinner2">
+					<label>标签</label>
+					<hr class="hr2">
+					<div class="tagscontainer" ng-repeat="tag in tags">
+						<span class="tagspan">{{tag.tag}}</span>
+						<!-- <span
+								class="tagspan">colorization</span> <span class="tagspan">computer
+								vision</span> <span class="tagspan">black and white</span> <span
+								class="tagspan">colorization</span> <span class="tagspan">computer
+								vision</span> <span class="tagspan">black and white</span> <span
+								class="tagspan">colorization</span> <span class="tagspan">computer
+								vision</span> -->
+					</div>
+				</div>
+			</div>
+			<div class="solution leftsection">
+				<div>
+					<div class="boxinner2">
+						<label>ML相关解决方案</label>
+					</div>
+					<hr class="hr2">
+					<div class="leftcontent">
+						<div class="imageholder">
+							<img src="images/solution1.jpg" alt="" title="solution">
+						</div>
+						<div class="chatwindow">
+							<p>ML解决方案的名称</p>
+							<div class="rating">
+								<span><i class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star-half-o" aria-hidden="true"></i></span>
+							</div>
+							<label class="normallbl display-block"> <span
+								class="iconspan1"><i class="fa fa-comment"
+									aria-hidden="true"></i> 12</span> <span class="iconspan1"><i
+									class="fa fa-eye" aria-hidden="true"></i> 176</span> <span
+								class="iconspan1"><i class="fa fa-download"
+									aria-hidden="true"></i> 6</span>
+							</label>
+						</div>
+					</div>
+					<div class="leftcontent">
+						<div class="imageholder">
+							<img src="images/solution1.jpg" alt="" title="solution">
+						</div>
+						<div class="chatwindow">
+							<p>ML解决方案的名称</p>
+							<div class="rating">
+								<span><i class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star-half-o" aria-hidden="true"></i></span>
+							</div>
+							<label class="normallbl display-block"> <span
+								class="iconspan1"><i class="fa fa-comment"
+									aria-hidden="true"></i> 12</span> <span class="iconspan1"><i
+									class="fa fa-eye" aria-hidden="true"></i> 176</span> <span
+								class="iconspan1"><i class="fa fa-download"
+									aria-hidden="true"></i> 6</span>
+							</label>
+						</div>
+					</div>
+					<div class="leftcontent">
+						<div class="imageholder">
+							<img src="images/solution1.jpg" alt="" title="solution">
+						</div>
+						<div class="chatwindow">
+							<p>ML解决方案的名称</p>
+							<div class="rating">
+								<span><i class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star-half-o" aria-hidden="true"></i></span>
+							</div>
+							<label class="normallbl display-block"> <span
+								class="iconspan1"><i class="fa fa-comment"
+									aria-hidden="true"></i> 12</span> <span class="iconspan1"><i
+									class="fa fa-eye" aria-hidden="true"></i> 176</span> <span
+								class="iconspan1"><i class="fa fa-download"
+									aria-hidden="true"></i> 6</span>
+							</label>
+						</div>
+					</div>
+					<div class="leftcontent">
+						<div class="imageholder">
+							<img src="images/solution1.jpg" alt="" title="solution">
+						</div>
+						<div class="chatwindow">
+							<p>ML解决方案的名称</p>
+							<div class="rating">
+								<span><i class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star" aria-hidden="true"></i></span> <span><i
+									class="fa fa-star-half-o" aria-hidden="true"></i></span>
+							</div>
+							<label class="normallbl display-block"> <span
+								class="iconspan1"><i class="fa fa-comment"
+									aria-hidden="true"></i> 12</span> <span class="iconspan1"><i
+									class="fa fa-eye" aria-hidden="true"></i> 176</span> <span
+								class="iconspan1"><i class="fa fa-download"
+									aria-hidden="true"></i> 6</span>
+							</label>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+</section>
+
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">下载工具</h4>
+			</div>
+			<div class="modal-body">
+				<div class="modal-body">
+					<table class="table table-bordered table-download">
+						<thead>
+							<tr>
+								<th>名称<i class="fa fa-chevron-up" aria-hidden="true"></i></th>
+								<th>类型</th>
+								<th>版本</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="value in downloadData">
+							<tr class="bluestrip">
+								<th><i class="fa fa-chevron-down" aria-hidden="true"></i>{{value.name}}</th>
+								<td>{{value.artifactTypeCode}}</td>
+								<td>{{value.version}}</td>
+								<td class="text-center" ng-click="download(value.artifactId)"><i
+									class="fa fa-download" aria-hidden="true"></i></td>
+							</tr>
+							<tr>
+								<th colspan="4">
+									<div>
+										<label>标签:</label> {{value.name}}
+									</div>
+									<div>
+										<label>说明:</label> {{value.description}}
+									</div>
+								</th>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!--Deploy To Cloud Modal -->
+<div class="md-dialog-container" id="myDialog" style="height:0;">
+							  <md-dialog aria-label="Mango (Fruit)" class="cg-dialog-Deploy-to-cloud">
+								  <form ng-cloak>
+									<md-toolbar>
+									  <div class="md-toolbar-tools">
+										<h2>部署到 Microsoft Azure</h2>
+										<span flex></span>
+										<md-button class="md-icon-button" ng-click="cancel()">
+										  <i class="material-icons">关闭</i>
+										</md-button>
+									  </div>
+									</md-toolbar>
+									<md-dialog-content>
+									  <div class="md-dialog-content">
+										<div class="mdl-grid mdl-grid--no-spacing deploy-grid">
+										  <div class="mdl-cell mdl-cell--6-col">
+										  		 <md-input-container class="md-icon-float md-block">
+												      <!-- Use floating label instead of placeholder -->
+												      <label>申请ID</label>
+												      <input ng-model="user.name" type="text">
+												 </md-input-container>
+												 <md-input-container class="md-icon-float md-block">
+												      <!-- Use floating label instead of placeholder -->
+												      <label>密钥</label>
+												      <input ng-model="user.pass" type="text">
+												 </md-input-container>
+												 <md-input-container class="md-icon-float md-block">
+												      <!-- Use floating label instead of placeholder -->
+												      <label>资源组</label>
+												      <input ng-model="user.pass" type="text">
+												 </md-input-container>												
+										  </div>
+										 
+										  <div class="mdl-cell mdl-cell--6-col">
+											<md-input-container class="md-icon-float md-block">
+												<label>租户Id</label>
+												 <input ng-model="user.pass" type="text">
+											</md-input-container>
+											<md-input-container class="md-icon-float md-block">
+												<label>订阅密钥</label>
+												 <input ng-model="user.pass" type="text">
+											</md-input-container>
+											<md-input-container class="md-icon-float md-block">
+												<label>Acr名称</label>
+												 <input ng-model="user.pass" type="text">
+											</md-input-container>
+										  </div>
+										</div>
+										<hr />
+										 <div layout="row" class="deploy-cloud-modalfooter">
+											<md-button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect btn-secondary">
+									        取消
+									      </md-button>
+										  <md-button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect btn-primary">
+									        部署
+									      </md-button>
+									    </div>								
+									  </div>
+									</md-dialog-content>
+									
+								  </form>
+								</md-dialog>
+							</div>

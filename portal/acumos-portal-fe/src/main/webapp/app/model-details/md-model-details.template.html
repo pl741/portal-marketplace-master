@@ -1,0 +1,1237 @@
+<!--  
+===============LICENSE_START=======================================================
+Acumos Apache-2.0
+===================================================================================
+Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+===================================================================================
+This Acumos software file is distributed by AT&T and Tech Mahindra
+under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+===============LICENSE_END=========================================================
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="posrel">
+	<alert-message msg="msg" icon="icon" styleclass="styleclass"
+		ng-show="showAlertMessage"></alert-message>
+</div>
+<div class="page-content">
+	<section class="pageheadsection gray-bg" id="md-model-detail-template">
+		<div class="md-head-container1">
+			<div class="md-head-containerinner1">
+				<span class="md-headline2 mob-disblock">
+					<img class="solutions-img" src="../images/solutions/R.png" />{{solution.name}}</span>				
+				<div class="md-head-container3">
+					<div class="md-head-containerinner-seperator"></div>
+					<div class="version-container">
+						<button id="demo-menu-lower-right" class="mdl-button mdl-js-button"
+								ng-click="showVersion();$event.stopPropagation();">
+								<span>版本 - {{versionId}} <i class="material-icons">keyboard_arrow_down</i></span>
+						</button>
+						<ul class="md-version-ddl1">
+							<li ng-repeat="v in versionList"
+									ng-click="loadVersionDetails(solution.solutionId, v.revisionId, v.version)"
+									ng-class="{selected: v.revisionId == revisionId}">版本 - {{v.version}}</li>
+						</ul>
+					</div>
+					<button type="button" ng-show="version.accessTypeCode != 'PR' && loginUserID && !audit"
+							class="mdl-button mdl-js-button mdl-js-ripple-effect "
+							ng-class="showORDescription == true ? 'btn-primary': 'btn-secondary'" alt="Company" title="Company" 
+							ng-click="showORDescription = !showORDescription; showORDocs = !showORDocs; showPBDescription = false; showPBDocs = false">公司</button>  <!-- solution.accessType == 'OR' || -->
+					<button type="button" ng-show="version.accessTypeCode != 'PR' && !audit"
+							class="mdl-button mdl-js-button mdl-js-ripple-effect"
+							ng-class="showPBDescription == true ? 'btn-primary': 'btn-secondary'" alt="Public" title="Public"
+							ng-click="showPBDescription = !showPBDescription; showPBDocs = !showPBDocs; showORDescription = false; showORDocs = false">公用</button> <!-- solution.accessType == 'PB' || -->
+			</div>
+			</div>
+			<div class="md-head-container2">	
+				<button type="button" ng-cloak ng-if="$root.enableDCAE && solution.active && solution.active == true && $root.isONAPCompatible && !audit"
+						class="mdl-button mdl-js-button btn-primary"
+						ui-sref="modularResource({ONAP: 'true', solutionId: solutionId, revisionId: revisionId})" ng-click="$root.parentActive = ''"
+						>创建ONAP</button>
+	
+				<button type="button"
+						ng-cloak
+						class="mdl-button mdl-js-button btn-primary"
+						ng-click="$root.showPrerenderedDialog($event, '#downloadDialog')"
+						ng-if="loginUserID"
+						alt="Download" title="Download">下载</button>
+						
+				<button type="button"
+						ng-cloak
+						class="mdl-button mdl-js-button btn-primary"
+						ng-click="showModalPublishReq('approve',solution.name, publishRequestId)"
+						ng-if="loginUserID && audit"
+						alt="Download" title="Download">批准出版</button>
+						
+				<button type="button"
+						ng-cloak
+						class="mdl-button mdl-js-button btn-primary"
+						ng-click="showModalPublishReq('decline',solution.name, publishRequestId)"
+						ng-if="loginUserID && audit"
+						alt="Download" title="Download">拒绝出版</button>
+						
+				<button type="button" ng-cloak
+						class="mdl-button mdl-js-button btn-primary"
+						ng-click="$root.showAdvancedLogin()" ng-if="!loginUserID" alt="Sign In To Download" title="Sign In To Download">登录下载</button>
+				
+				<div class="select-control dcl-list" ng-show="solution.active == true && loginUserID  && !audit" ng-cloak>
+                    <!-- Through Properties File -->
+                    <md-select ng-model="exportTo" placeholder="Deploy To Cloud" class="dc-cloud-list">
+                          <md-option ng-repeat = "deployVal in checkDeployToCloudResponse track by $index"
+                              	ng-click="$root.showPrerenderedDialog($event, '#myDialog');clearForm()"
+                           		class="opacityZero deploy-to-cloud" value="{{deployVal.cloudName}}" alt="{{deployVal.cloudDisplayText}}"
+                           		title="{{deployVal.cloudDisplayText}}"
+                           		style="background:#fff url({{deployVal.imageUrl}}) no-repeat 10px center"
+                           		ng-disabled="deployVal.cloudEnabled=='false'">
+                           		{{deployVal.cloudDisplayText}}
+                          </md-option>
+                     </md-select>
+                </div>
+                
+                <button type="button" ng-cloak
+						class="mdl-button mdl-js-button mdl-js-ripple-effect btn-secondary"
+						ng-click="$root.showAdvancedLogin()" ng-if="!loginUserID  && !audit" alt="Sign In To Deploy to Cloud" title="Sign In To Deploy to Cloud">登录部署到云
+				</button>
+			</div>
+		</div>
+		<div class="md-head-container2">
+			<ul class="c-breadcrumb solution_id_top">
+				<li><a ui-sref="home" ng-click="$root.parentActive = ''">主页</a></li>
+				<li><a ui-sref="marketPlace"
+						ng-if="$root.parentActive == 'marketplace'">商城</a> <a
+						ui-sref="manageModule" ng-if="$root.parentActive == 'mymodel'">我的模型</a></li>
+				<li><span class="md-breadcrumb-item">{{solution.name}}</span></li>
+                          	<li><span class="solution_id_bg">解决方案ID:{{solution.solutionId}}</span></li>
+			</ul>
+				<span class="md-lbl1" >版本 {{versionId}} |
+					{{solution.downloadCount === null ? 0 : solution.downloadCount}}
+					已下载</span>
+		</div>
+	</section>
+	<div class="md-container-head1 md-header3">
+		<div class="head-stat-left">
+			<div class="mdchild1">
+				<!-- <img src="images/chatuser.jpg" alt="" title="user"> -->
+				<!-- default image -->
+				<img class="userimg" ng-show="showAltImage"
+					ng-src="images/userprofile/user-profile-black.png"
+					title="{{userfirstname}}" />
+				<!-- user uploaded image -->
+				<img class="userimg" ng-show="!showAltImage"
+					ng-src="data:image/PNG;base64,{{userImage}}"
+					title="{{userfirstname}}" />
+			</div>
+			<div>
+				<div>
+					<span class="text-medium font600"><span
+						class="md-created-label" style="text-overflow: unset; max-width: none;">{{solution.ownerName}}创建</span></span>
+					| <span class="text-xsmall">创建于 {{solution.created |
+						date:'MM/dd/yyyy'}} </span><span ng-if="!audit">|
+					<button
+						class="mdl-button mdl-js-button mdl-js-ripple-effect btn-md-edit"
+						ui-sref="modelEdit({solutionId:solutionId, revisionId:revisionId})"
+						ng-disabled="editModel" alt="Manage My Model" title="Manage My Model">
+						<i class="material-icons">mode_edit</i> 管理我的模型
+					</button>
+					</span>
+				</div>
+				<span class="text-xsmall publish-text" ng-if="version.accessTypeCode != 'PR'">发表于
+					{{solution.modified | date:'MM/dd/yyyy' }}</span>
+			</div>
+		</div>
+
+		<div class="header-stats" ng-if="version.accessTypeCode == 'PR' && solution.active == true">
+			<span
+				style="color: rgb(255, 87, 34); text-transform: uppercase; padding-right: 20px; font-weight: bold; font-size: 12px; padding-top: 5px;">状态: 未发表</span>
+		</div>
+		<div class="header-stats" ng-if="solution.active == false">
+			<span
+				style="color: rgb(255, 87, 34); text-transform: uppercase; padding-right: 20px; font-weight: bold; font-size: 12px; padding-top: 5px;">状态: 已删除</span>
+		</div>
+
+		<div class="header-stats" ng-if="version.accessTypeCode != 'PR'  && !audit">
+			<div>
+				<span class="rating header-stat-lg"> <span><i
+						class="material-icons fa fa-star"
+						ng-class="{'fa-star1': mlSolutionGetRating.content[0].rating == null || mlSolutionGetRating.content[0].rating < 1}"></i></span>
+					<span><i class="material-icons fa fa-star"
+						ng-class="{'fa-star1': mlSolutionGetRating.content[0].rating == null || mlSolutionGetRating.content[0].rating < 2}"></i></span>
+					<span><i class="material-icons fa fa-star"
+						ng-class="{'fa-star1': mlSolutionGetRating.content[0].rating == null || mlSolutionGetRating.content[0].rating < 3}"></i></span>
+					<span><i class="material-icons fa fa-star"
+						ng-class="{'fa-star1': mlSolutionGetRating.content[0].rating == null || mlSolutionGetRating.content[0].rating < 4}"></i></span>
+					<span><i class="material-icons fa fa-star"
+						ng-class="{'fa-star1': mlSolutionGetRating.content[0].rating == null || mlSolutionGetRating.content[0].rating < 5}"></i></span>
+				</span>
+			</div>
+			<!-- <div class="header-stat-star"><a href="#"><i class="material-icons">star_rate</i> {{solution.solutionRating}}</a></div> -->
+			<div>
+				<a class="link-blue text-medium" ng-click="scrollToComment('view')"><span
+					class="statistics-icons icon-chat-blue md-icons1" alt="Comment" title="Comment"></span>
+					{{totalCommentCount}} <span class="header-stat-lg">评论</span></a>
+			</div>
+			<div ng-show="solution.active == true">|</div>
+			<div ng-show="solution.active == true">
+				<a class="link-write-comments link-blue text-medium" ng-click="scrollToComment('edit')">写评论</a>
+			</div>
+			<div>|</div>
+			<div class="text-medium">
+				<span class="statistics-icons icon-view md-icons1" alt="View" title="View"></span>
+				{{solution.viewCount === null ? 0 : solution.viewCount}} <span
+					class="header-stat-lg">已查看</span>
+			</div>
+			<div>|</div>
+			<div class="text-medium">
+				<span class="statistics-icons icon-download md-icons1" alt="Download" title="Download"></span>
+				{{solution.downloadCount === null ? 0 : solution.downloadCount}} <span
+					class="header-stat-lg">已下载</span>
+			</div>
+		</div>
+	</div>
+	<div class="page-wrapper3">
+		<div
+			class="mdl-tabs vertical-mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+			<div class="mdl-grid mdl-grid--no-spacing">
+				<div class="mdl-cell md-left-container">
+					<div class="mdl-tabs__tab-bar">
+						<a href="#tab1-panel" class="mdl-tabs__tab is-active" alt="Description" title="Description"> <span
+							class="tab-box"> <span class="tab-icons tab-description"></span>
+								<span>说明</span>
+						</span>
+						</a> <a href="#tab2-panel" class="mdl-tabs__tab" alt="Signatures" title="Signatures"> <span
+							class="tab-box"> <span class="tab-icons tab-signatures"></span>
+								<span>签名</span>
+						</span>
+						</a> <a href="#tab3-panel" class="mdl-tabs__tab" alt="Documents" title="Documents"> <span
+							class="tab-box"> <span class="tab-icons tab-documents"></span>
+								<span>文件</span>
+						</span>
+
+						</a> <a href="#tab4-panel" class="mdl-tabs__tab" alt="Model Artifacts" title="Model Artifacts"> <span
+							class="tab-box"> <span
+								class="tab-icons tab-versionhistory"></span> <span>模型工具
+									</span>
+						</span>
+						</a>
+						
+						<a href="#tab6-panel" class="mdl-tabs__tab" alt="Author/Publisher Details" title="Author/Publisher Details"> <span
+							class="tab-box"> <span
+								class="tab-icons tab-author_details"></span> <span>作者/出版社详情
+									</span>
+						</span>
+						</a>
+
+						<a href="#tab5-panel" class="mdl-tabs__tab tab5-panel"> </a>
+					</div>
+					<div>
+						<!-- <hr class="hor-seperator" /> -->
+						<h6 class="sectiontitle4">
+							标签<span class="title-icons icon-tags" alt="Tags" title="Tags"></span>
+						</h6>
+						<div class="box-inner2 rowcontainer">
+							<md-chips ng-model="tags" readonly="true"> 
+								<md-chip-template>
+									{{$chip.tag}}
+								 </md-chip-template> 
+							</md-chips>
+							<br/>
+						</div>
+					</div>
+					<hr class="hor-seperator" />
+					<div class="" ng-if="!audit">
+						<h6 class="sectiontitle4">
+							其他 {{solution.modelTypeName}} 模型 <a
+								class="text-small pull-right" data-target ng-click="showAll()">全部显示</a>
+						</h6>
+						<div class="md-list-container1">
+							<div class="list-item list-container"
+								ng-repeat="val in relatedSolutions | limitTo: 5">
+								<ul class="model-list"
+									ng-click='goToRelatedSolutions(val.solutionId)'>
+									<li><img src="images/solution2.jpg" alt=""
+										ng-click="onClickModel(val.solutionId, val.ownerId)"
+										title="solution"></li>
+									<li><label class="rel-title">{{val.name}}</label> <span
+										class="rating"> <span><i
+												class="material-icons fa fa-star"
+												ng-class="{'fa-star1': val.solutionRatingAvg == null || val.solutionRatingAvg < 1}"></i></span>
+											<span><i class="material-icons fa fa-star"
+												ng-class="{'fa-star1': val.solutionRatingAvg < 2}"></i></span> <span><i
+												class="material-icons fa fa-star"
+												ng-class="{'fa-star1': val.solutionRatingAvg < 3}"></i></span> <span><i
+												class="material-icons fa fa-star"
+												ng-class="{'fa-star1': val.solutionRatingAvg < 4}"></i></span> <span><i
+												class="material-icons fa fa-star"
+												ng-class="{'fa-star1': val.solutionRatingAvg < 5}"></i></span>
+									</span> <label class="iconcontainer"> <span class="iconspan1"><span
+												class="statistics-icons icon-chat" alt="Comment" title="Comment"></span> 0</span> <span
+											class="iconspan1"><span
+												class="statistics-icons icon-view" alt="View" title="View"></span> {{val.viewCount}}</span>
+											<span class="iconspan1"><span
+												class="statistics-icons icon-download" alt="Download" title="Download"></span>
+												{{val.downloadCount}}</span>
+									</label></li>
+								</ul>
+							</div>
+
+						</div>
+					</div>
+
+
+				</div>
+				<div class="mdl-cell md-right-container model-details-tabwrapper">
+					<div class="mdl-tabs__panel is-active" id="tab1-panel">
+						<div class="md-intro-container">
+							<h6 class="sectiontitle9">介绍</h6>
+						</div>
+
+						<div class="description-img-container">
+							<!-- <img class="modelimg1" src="images/imagegallery2.jpg" /> -->
+
+							<!-- images changed for demo  -->
+							<!-- <img
+								ng-src="{{previewImage}}" class="modelimg1"
+								style="max-width: 400px; margin: 0 auto; display: block;"> -->
+								<img ng-show="solution.picture" ng-src="data:image/JPEG;base64,{{solution.picture}}" class="modelimg1" style="max-width: 400px; margin: 0 auto; display: block;">
+								<img ng-hide="solution.picture" ng-src="images/default-model.png" class="modelimg1" style="max-width: 400px; margin: 0 auto; display: block;">
+
+						</div>
+						<!-- <p>Parsey McParseface is a language parsing tool that is fantastic at tagging word meaning within sentences and forming a parse tree (in Tree or Conll format) for other NLP algorithms to use</p> -->
+							<div ng-bind-html="solutionPublicDesc1" ng-show="showPBDescription"></div>
+							<div ng-bind-html="solutionCompanyDesc1" ng-show="showORDescription" ></div>
+
+					</div>
+					<div class="mdl-tabs__panel" id="tab2-panel">
+						<h6 class="sectiontitle6">签名</h6>
+						<div ng-show= "modelSignature"><pre>{{modelSignature}}</pre></div>
+
+					</div>
+					<div class="mdl-tabs__panel" id="tab3-panel">
+						<h6 class="sectiontitle6">支持文件</h6>
+						<table class="mdl-data-table mdl-js-data-table md-tbl1">
+							<colgroup>
+								<col />
+								<col />
+								<col />
+								<col width="10%" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th>文件夹/文件</th>
+									<th>版本</th>
+									<th>修改</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- ng-repeat = "value in downloadData" -->
+								<tr ng-repeat="supportingDoc in supportingDocsPB" ng-show="showPBDocs">
+									<td><span class="file-type">
+											<i class="far fa-file-word" ng-if="supportingDoc.ext == 'docx'" aria-hidden="true"></i>
+											<i class="far fa-file-image" ng-if="supportingDoc.ext == 'png'" aria-hidden="true"></i>
+											<i class="far fa-file-image" ng-if="supportingDoc.ext == 'jpg'" aria-hidden="true"></i>
+											<i class="far fa-file-pdf" ng-if="supportingDoc.ext == 'pdf'" aria-hidden="true"></i>
+											<i class="far fa-file-powerpoint" ng-if="supportingDoc.ext == 'pptx'" aria-hidden="true"></i>
+											<i class="far fa-file-excel" ng-if="supportingDoc.ext == 'xlsx'" aria-hidden="true"></i>
+											<i class="far fa-file-excel" ng-if="supportingDoc.ext == 'csv'" aria-hidden="true"></i>
+											<i class="far fa-file-alt" ng-if="supportingDoc.ext == 'txt'" aria-hidden="true"></i>
+											<i class="far fa-file-archive" ng-if="supportingDoc.ext == 'zip'" aria-hidden="true"></i>
+									</span><a
+										class="link-blue">{{supportingDoc.name}}</a></td>
+									<td>{{versionId}}</td>
+									<td>{{solution.modified | date:'MM/dd/yyyy' }}</td>
+									<td><a ng-if="version.accessTypeCode ==='OR' " 
+										href="/api/solution/revision/document/{{supportingDoc.documentId}}?jwtToken={{auth}}" alt="Download" title="Download">
+										<i class="fa fa-download" aria-hidden="true"></i> </a>
+										<a ng-if="version.accessTypeCode !=='OR' " 
+										href="/api/solution/revision/document/{{supportingDoc.documentId}}?jwtToken={{auth}}" alt="Download" title="Download">
+											<i class="fa fa-download" aria-hidden="true"></i>
+									</a></td>
+								</tr>
+								
+								<tr ng-repeat="supportingDoc in supportingDocsOR" ng-show="showORDocs">
+									<td><span class="file-type">
+											<i class="far fa-file-word" ng-if="supportingDoc.ext == 'docx'" aria-hidden="true"></i>
+											<i class="far fa-file-image" ng-if="supportingDoc.ext == 'png'" aria-hidden="true"></i>
+											<i class="far fa-file-image" ng-if="supportingDoc.ext == 'jpg'" aria-hidden="true"></i>
+											<i class="far fa-file-pdf" ng-if="supportingDoc.ext == 'pdf'" aria-hidden="true"></i>
+											<i class="far fa-file-powerpoint" ng-if="supportingDoc.ext == 'pptx'" aria-hidden="true"></i>
+											<i class="far fa-file-excel" ng-if="supportingDoc.ext == 'xlsx'" aria-hidden="true"></i>
+											<i class="far fa-file-excel" ng-if="supportingDoc.ext == 'csv'" aria-hidden="true"></i>
+											<i class="far fa-file-alt" ng-if="supportingDoc.ext == 'txt'" aria-hidden="true"></i>
+											<i class="far fa-file-archive" ng-if="supportingDoc.ext == 'zip'" aria-hidden="true"></i>
+									</span><a
+										class="link-blue">{{supportingDoc.name}}</a></td>
+									<td>{{versionId}}</td>
+									<td>{{solution.modified | date:'MM/dd/yyyy' }}</td>
+									<td><a ng-if="version.accessTypeCode ==='OR' " 
+										href="/api/solution/revision/document/{{supportingDoc.documentId}}?jwtToken={{auth}}" alt="Download" title="Download">
+										<i class="fa fa-download" aria-hidden="true"></i> </a>
+										<a ng-if="version.accessTypeCode !=='OR' " 
+										href="/api/solution/revision/document/{{supportingDoc.documentId}}?jwtToken={{auth}}" alt="Download" title="Download">
+											<i class="fa fa-download" aria-hidden="true"></i>
+									</a></td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+					<div class="mdl-tabs__panel" id="tab4-panel">
+						<h6 class="sectiontitle6">模型工具</h6>
+						<table class="mdl-data-table mdl-js-data-table md-tbl1">
+							<colgroup>
+								<col />
+								<col />
+								<col />
+								<col width="15%" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th>工具名称</th>
+									<th>版本</th>
+									<th>修改</th>
+									<th>尺寸</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="value in downloadData">
+									<td>
+										<!-- <a class="link-blue" href="#"> --><!-- Version name 
+										{{value.name}}<!-- </a>  <span class="font600"></span> -->
+										
+										<label class="a-tooltip"><span class="a-tooltipval">{{value.name}}</span>
+											<span class="a-tooltiptext">{{value.name}}</span>
+										</label>					
+									</td>
+									<td>{{value.version}}</td>
+									<td>{{value.created | date:'MM/dd/yyyy'}}</td>
+									<td>{{value.size | formatBytes:1}}</td>
+									<td>
+										<md-button ng-cloak ng-if="!loginUserID" class="mdl-button mdl-js-button btn-grid-action" ng-click="$root.showAdvancedLogin()">
+											<i class="fa fa-download" aria-hidden="true"></i>
+										</md-button>
+									
+										<md-button ng-cloak ng-if="loginUserID" class="mdl-button mdl-js-button btn-grid-action" href="/api/downloads/{{solution.solutionId}}?artifactId={{value.artifactId}}&revisionId={{revisionId}}&userId={{loginUserID}}&jwtToken={{auth}}" >
+											<i class="fa fa-download" aria-hidden="true"></i>
+										</md-button>
+
+									</td>
+								</tr>
+
+
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="mdl-tabs__panel" id="tab6-panel">
+						<h6 class="sectiontitle6">作者/出版商详情</h6>
+						<table class="mdl-data-table mdl-js-data-table md-tbl1">
+							<colgroup>
+								<col />
+								<col />								
+							</colgroup>
+							<thead>
+								<tr>
+									<th>姓名</th>
+									<th>联系信息</th>
+								</tr>
+							</thead>
+							<tbody>								
+								<tr ng-repeat="author in authorList">
+									<td><span>{{author.name}}</span></td>
+									<td><span>{{author.contact}}</span></td>									
+								</tr>
+								<tr ng-repeat="publisher in publisherList">
+									<td><span>{{publisher}}</span></td>
+									<td><span></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="mdl-tabs__panel" id="tab5-panel">内容 5</div>
+					<div class="md-lower-container1" ng-hide="version.accessTypeCode == 'PR' || audit">
+						<div class="mdl-grid mdl-grid--no-spacing bdr-bottom">
+							<div
+								class="mdl-cell mdl-cell--7-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+								<h6 class="sectiontitle9 rate-title">评分:
+									{{solution.name}}</h6>
+							</div>
+							<div  ng-show="version.accessTypeCode == 'PB'"
+								class="mdl-cell mdl-cell--5-col mdl-cell--4-col-tablet mdl-cell--4-col-phone">
+								<div flex class="text-right" >
+									<ul class="horizontal-list2 md-social-icons">
+                                        <li><h6 class="sharetitle">共享</h6></li>
+                                        <li><span alt="Facebook" title="Facebook"><i class="fab fa-facebook-f"
+                                                aria-hidden="true"></i></span></li>
+                                        <li><span alt="Linkedin" title="Linkedin"><i class="fab fa-linkedin-in"
+                                                aria-hidden="true"></i></span></li>
+                                        <li><span alt="Google Plus" title="Google Plus"><i class="fab fa-google-plus-g"
+                                                aria-hidden="true"></i></span></li>
+                                        <li><span alt="Github" title="Github"><i class="fab fa-github"
+                                                aria-hidden="true"></i></span></li>
+                                        <li><span alt="Twitter" title="Twitter"><i class="fab fa-twitter"
+                                                aria-hidden="true"></i></span></li>
+                                    </ul>
+								</div>
+							</div>
+						</div>
+						<div class="rating-container"> 
+							<div class="mdl-grid rating-container-inner">
+								<div class="mdl-cell mdl-cell--6-col rating-container-left">
+
+									<div class="">
+                                        <div class="new-rating-container">
+<!--                                         <div class="rating-container1"> -->
+<!--                                         <div class="n-rating1"> -->
+                                            <span class="star-rating-title" ng-show="cantRate || !cantRate">{{averageRatings.ratingAverageTenths}}</span>
+                                            <label class="ratingtxt1">满分5星</label>
+											<div class="stars-outer">
+												<div class="stars-inner"></div>
+											</div>
+											<!--   <jk-rating-stars rating="averageRatings.ratingAverageTenths" class="staticRating read-only-rating1"></jk-rating-stars> -->                                            
+                                        	<label class="font600 ratingtxt2">{{totalRatingsCount}} 评分与评论</label>
+                                        	<button 
+                                                ng-disabled="cantRate"
+                                                ng-click="$root.showPrerenderedDialog($event, '#rateModelPopup')"
+                                                class="mdl-button mdl-js-button mdl-js-ripple-effect btn-secondary">评价此模型</button>
+                                        </div>                                       
+                                    </div>
+								</div>
+								<div class="mdl-cell mdl-cell--4-col rating-container-right">
+									<div class="progress-wrapper">
+										<span>5 星</span>
+										<div class="progress">
+											<div class="determinate" style="background-color: green" ng-style='{"width": perratingCount5 + "%"}'></div>
+										</div>
+										<span style="font-weight: bold"> {{ratingCount5}} </span> 
+									</div>
+									<div class="progress-wrapper">
+										<span>4 星</span>
+										<div class="progress">
+											<div class="determinate" style="background-color: green" ng-style='{"width": perratingCount4 + "%"}'></div>
+										</div>
+										<span style="font-weight: bold"> {{ratingCount4}} </span> 
+									</div>
+									<div class="progress-wrapper">
+										<span>3 星</span>
+										<div class="progress">
+											<div class="determinate" style="background-color: green" ng-style='{"width": perratingCount3 + "%"}'></div>
+										</div>
+										<span style="font-weight: bold"> {{ratingCount3}} </span> 
+									</div>
+									<div class="progress-wrapper">
+										<span>2 星</span>
+										<div class="progress">
+											<div class="determinate" style="background-color: orange" ng-style='{"width": perratingCount2 + "%"}'></div>
+										</div>
+										<span style="font-weight: bold"> {{ratingCount2}} </span> 
+									</div>
+									<div class="progress-wrapper">
+										<span>1 星</span>
+										<div class="progress">
+											<div class="determinate" style="background-color: red" ng-style='{"width": perratingCount1 + "%"}'></div>
+										</div>
+										<span style="font-weight: bold"> {{ratingCount1}}</span> 
+									</div>
+								</div>
+								<div class="mdl-cell mdl-cell--5-col"></div>
+							</div>
+							<hr class="md-hr-rule1" />
+							<!-- tabs starts -->
+						<div ng-hide="solution.active == false">
+						<md-tabs md-dynamic-height md-border-bottom class="discussion-reviews-tab">
+						
+						<!-- discussion/review starts -->	      
+					      <md-tab label="Discussion ({{totalCommentCount}})" id="discussionTab">
+					        <md-content class="">
+							<div class="discussion-outer-container" >
+								<div class="md-discussion-container">
+									<div class="md-discussion-links-container">
+										<a ng-click="commentNewest=true">最新</a> <span>|</span> <a ng-click="commentNewest=false">旧文</a> <span>|</span> <a>喜欢</a>
+									</div>
+								</div>
+							</div>
+							<div class="discussion-outer-container">
+								<div class="discussion-container discussion-container2"
+									ng-repeat="(key, comment) in commentList | orderBy:'+created':commentNewest">
+									<div>
+										<img src="images/userprofile/user-profile-black.png" alt="" ng-show = "!comment.image"
+											title="user">
+										<!-- user uploaded image -->
+										<img class="userimg" ng-show="comment.image"
+										ng-src="data:image/PNG;base64,{{comment.image}}"
+										title="{{comment.name}}" />
+									</div>
+									<div class="discussion-details" ng-if = "comment.parentId == null">
+										<div>
+											<span class="dis-name">
+												{{comment.firstName}} {{comment.lastName}}</span> | <span
+												class="text-small">{{comment.stringDate}}</span>
+											<button
+												class="mdl-button mdl-js-button btn-comments-edit"
+												ng-click="showEditComment = !showEditComment" ng-hide="loginUserID != comment.userId"
+												>编辑</button>
+											<button
+												class="mdl-button mdl-js-button btn-comments-delete"
+												ng-click="deleteComment(comment)" ng-hide="loginUserID != comment.userId || comment.replies.length>0"
+												>删除</button>
+										</div>
+										<p ng-hide="showEditComment">{{comment.text}}</p>
+										<textarea class="mdl-textfield__input md-txtarea" type="text" ng-model = "comment.text"
+											ng-show="showEditComment" rows="3" id="comment">{{comment.text}}</textarea>
+										<button
+											class="mdl-button mdl-js-button btn-primary"
+											ng-show="showEditComment" ng-click="edit = false; editComment(comment)">发表</button>
+										<div>
+											<button
+												class="mdl-button mdl-js-button btn-secondary"
+												ng-click="replytoComment = !replytoComment">回复</button>
+											<div class="flex1 discussionformbox" ng-show="replytoComment">
+												<div class="mdl-textfield mdl-js-textfield">
+													<input class="mdl-textfield__input" type="text"
+														ng-model="newcomment[key].text">
+												</div>
+												<button
+													class="mdl-button mdl-js-button btn-primary"
+													ng-click="postReply(key, comment)">发表</button>
+											</div>
+										</div>
+										<div class="discussion"
+											ng-repeat="(key, reply) in comment.replies | orderBy:'+created'">
+											<!-- <div class="flex1 discussionformbox">
+														<div class="mdl-textfield mdl-js-textfield">
+															<input  class="mdl-textfield__input" type="text" ng-model="newcomment[key].text"
+																id="sample3"> <label
+																class="mdl-textfield__label">Add
+																Reply here...</label>
+														</div> 
+														<button
+															class="mdl-button mdl-js-button btn-primary" ng-click="postReply(key, reply.id)">Post</button>
+													</div> -->
+											<div>
+											<img src="images/userprofile/user-profile-black.png" alt="" ng-show = "!reply.image"
+											title="user">
+													<img class="userimg" ng-show="reply.image"
+														ng-src="data:image/PNG;base64,{{reply.image}}"
+														title="{{reply.name}}" />
+											</div>
+											<div class="discussion-details">
+
+												<div>
+												<span class="dis-name">
+												{{reply.firstName}} {{reply.lastName}}</span> | <span
+												class="text-small">{{reply.stringDate}}</span>
+													<button
+														class="mdl-button mdl-js-button btn-comments-edit"
+														ng-click="showEditReply = !showEditReply" ng-hide="loginUserID != reply.userId"
+														>编辑</button>
+													<button
+														class="mdl-button mdl-js-button btn-comments-delete"
+														ng-click="deleteComment(reply)" ng-hide="loginUserID != reply.userId"
+														>删除</button>
+												</div>
+												<p ng-hide="showEditReply">{{reply.text}}</p>
+												<textarea class="mdl-textfield__input md-txtarea"
+													type="text" ng-show="showEditReply" rows="1" id="comment" ng-model="reply.text">{{reply.text}}</textarea>
+												<button
+													class="mdl-button mdl-js-button btn-primary"
+													ng-show="showEditReply" ng-click="edit = false; editComment(reply)">发表</button>
+												<!-- <button ng-if="reply.replies.length > 0"
+												class="mdl-button mdl-js-button btn-secondary" ng-click="replytoComment[key] = !replytoComment[key]">Reply</button> -->
+
+												<div class="flex1 discussionformbox"
+													ng-show="replytoComment[key]">
+													<div class="mdl-textfield mdl-js-textfield">
+														<input class="mdl-textfield__input" type="text"
+															ng-model="newcomment[key].text" id="newcomment-{{key}}">
+													</div>
+													<button
+														class="mdl-button mdl-js-button btn-primary"
+														ng-click="postReply(key, reply.id)">发表</button>
+												</div>
+
+
+												<!-- <div ng-if="reply.replies" class="discussion" ng-repeat="(key, reply) in reply.replies" ng-include="'commentTree'">
+											</div> -->
+
+												<!-- <div class="flex1 discussionformbox" ng-if="reply.replies.length == 0">
+														<div class="mdl-textfield mdl-js-textfield">
+															<input class="mdl-textfield__input" type="text" ng-model="newcomment[key].text"
+																id="sample3"> <label
+																class="mdl-textfield__label">Add
+																Reply here...</label>
+														</div> 
+														<button
+															class="mdl-button mdl-js-button btn-primary" ng-click="postReply(key, reply.id)">Post</button>
+													</div> -->
+											</div>
+
+										</div>
+									</div>
+
+
+								</div>
+
+								<br />
+								<div class="discussion-add-comment" ng-hide="solution.active == false">
+									<label class="md-lbl2">添加评论</label>
+									<div class="flex1">
+										<div 
+											class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label md-txtarea-container">
+											<textarea class="mdl-textfield__input md-txtarea" type="text"
+												rows="3" id="editComment" ng-model="comment"></textarea>
+											<!-- <label class="mdl-textfield__label" for="sample3">Add comment here...</label> -->
+										</div>
+									</div>
+									<button id="postCommentsBtn"
+										class="mdl-button mdl-js-button btn-primary"
+										ng-disabled="!comment"
+										ng-click="postComment()" alt="Post Comments" title="Post Comments">发表评论</button>
+								</div>
+							</div>
+							 </md-content>
+					      </md-tab>
+					      <!--  rating/reivew  ends -->
+					      
+							<!--  review starts -->
+						 	<md-tab label="Ratings and reviews ({{totalRatingsCount}})">
+						 	<!-- $scope.allUserRatings ... $scope.mlSolutionGetRating ...  -->
+						        <md-content>
+						        	<div class="discussion-row" ng-repeat="usersRating in allUserRatings">
+						        		<div class=""> <!-- reviews-ratings-container removed class -->
+						        			<div class="rating clear_both">
+												<span>
+												 <i class="fa fa-star" ng-class="{'fa-star1': usersRating.rating == null || usersRating.rating < 1}" aria-hidden="true"></i></span> <span><i
+													class="fa fa-star" ng-class="{'fa-star1': usersRating.rating == null || usersRating.rating < 2}" aria-hidden="true"></i></span> <span><i
+													class="fa fa-star" ng-class="{'fa-star1': usersRating.rating == null || usersRating.rating < 3}" aria-hidden="true"></i></span> <span><i
+													class="fa fa-star" ng-class="{'fa-star1': usersRating.rating == null || usersRating.rating < 4}" aria-hidden="true"></i></span> <span><i
+													class="fa fa-star" ng-class="{'fa-star1': usersRating.rating == null || usersRating.rating < 5}" aria-hidden="true"></i>
+												 </span>
+											</div>
+					        			</div>
+						        		<div>
+						        			<label class="discussion-lbl1">By {{usersRating.userName}} on {{usersRating.created | date:'MM/dd/yyyy'}}</label>
+					        			</div>
+						        		<p>{{usersRating.textReview}}</p>
+						        	</div>
+						        </md-content>
+						      </md-tab>							     
+							<!--  review starts ends-->
+							
+						  </md-tabs>	
+						</div>
+						<!-- end tabs -->
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/ng-template" id="commentTree">
+												<div>
+													<img src="images/userprofile/user-profile-black.png" alt="" title="user">
+												</div>
+												<div class="discussion-details" >
+													 
+													 <div >
+														<label class="dis-name">{{reply.name}}</label> | <span
+															class="text-small">{{reply.creationDate}}</span>
+														<button    class="mdl-button mdl-js-button btn-secondary btn-reply1 btn-small" ng-click="edit = true"><i class="material-icons">mode_edit</i> 编辑</button>
+                                                        <button    class="mdl-button mdl-js-button btn-secondary btn-reply1 btn-small" ng-click="deleteComment(comment.id)"><span class="btn-trash-icon"></span>删除</button>
+													</div>
+													<p ng-hide="edit">{{reply.text}}</p>
+													<textarea class="mdl-textfield__input md-txtarea" type="text" ng-show="edit"
+														rows="1" id="comment">{{reply.text}}</textarea>
+													<div class="reply-btn-container1">
+                                                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect btn-primary" ng-show="edit" ng-click="edit = false; editComment(reply)">发表</button>
+                                                            <button ng-if="reply.replies.length > 0" class="mdl-button mdl-js-button btn-secondary" ng-click="replytoComment[key] = !replytoComment[key]">回复</button>
+                                                        </div>												
+														<div class="flex1 discussionformbox" ng-show="replytoComment[key]">
+														<div class="mdl-textfield mdl-js-textfield">
+															<input class="mdl-textfield__input" type="text" ng-model="newcomment[key].text" id="sample3">
+														</div> 
+														<button
+															class="mdl-button mdl-js-button btn-primary" ng-click="postReply(key, reply.id)">发表</button>
+													</div>
+												
+
+											<div ng-if="reply.replies" class="discussion" ng-repeat="(key, reply) in reply.replies" ng-include="'commentTree'">
+											</div>
+												
+														<div class="flex1 discussionformbox" ng-if="reply.replies.length == 0">
+														<div class="mdl-textfield mdl-js-textfield">
+															<input class="mdl-textfield__input" type="text" ng-model="newcomment[key].text"
+																id="sample3"> <label
+																class="mdl-textfield__label">再此添加回复</label>
+														</div> 
+														<button
+															class="mdl-button mdl-js-button btn-primary" ng-click="postReply(key, reply.id)">发表</button>
+													</div>
+	</script>
+	</script>
+
+	<!--Deploy To Cloud Modal -->
+	<div class="md-dialog-container" id="myDialog" style="height: 0;">
+		<md-dialog aria-label="Deploy To Cloud"
+			class="cg-dialog-Deploy-to-cloud">
+		
+			<md-toolbar>
+			<div class="md-toolbar-tools">
+			<!-- cloudName should match to the model value -->
+				<h2 ng-show="exportTo=='azure'">部署到Microsoft Azure</h2>
+				<h2 ng-show="exportTo=='rackspace'">部署到RackSpace</h2>
+				<h2 ng-show="exportTo=='deploylocal'">部署到本地</h2>
+				<h2 ng-show="exportTo=='whitebox'">部署到White Box</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="handleDismiss()">
+				<i class="material-icons">关闭</i> </md-button>
+			</div>
+			</md-toolbar>
+			<md-dialog-content>
+				<div class="md-dialog-content">
+				<!-- Deploy To Azure starts -->
+				<div ng-show="exportTo=='azure'">
+				<form name="deploy">
+				<div class="mdl-grid mdl-grid--no-spacing deploy-grid" >
+					<div class="mdl-cell mdl-cell--4-col">
+						<md-input-container class="md-icon-float md-block">
+							<label>申请ID </label> <input ng-model="applicationId" name="applicationId" type="text" required ng-blur="applicationIdVisited=true" ng-focus="applicationIdVisited=false">
+							<div class="help-inline validation-msgs" ng-class="{validationmsg:!deploy.applicationId.$valid}">
+								<span ng-show="( !!deploy.applicationId.$error.required && deploy.applicationId.$touched && applicationIdVisited)">必须申请ID。</span>
+							</div>
+						</md-input-container>
+						<md-input-container class="md-icon-float md-block">
+							<label>订阅密钥 </label> <input ng-model="subscriptionKey" name="subscriptionKey" required type="text" ng-blur="subscriptionKeyVisited=true" ng-focus="subscriptionKeyVisited=false">
+							<div class="help-inline validation-msgs" ng-class="{validationmsg:!deploy.subscriptionKey.$valid}">
+								<span ng-show="( !!deploy.subscriptionKey.$error.required && deploy.subscriptionKey.$touched && subscriptionKeyVisited)">需要订阅密钥。</span>
+							</div>
+						</md-input-container>
+						<md-input-container class="md-icon-float md-block">
+							 <label>存储账户</label> <input ng-model="storageAccount" type="text" name="storageAccount" required ng-blur="storageAccountVisited=true" ng-focus="storageAccountVisited=false">
+							<div class="help-inline validation-msgs" ng-class="{validationmsg:!deploy.storageAccount.$valid}">
+								<span ng-show="( !!deploy.storageAccount.$error.required && deploy.storageAccount.$touched && storageAccountVisited)">需要存储账户。</span>
+							</div>
+						</md-input-container>
+					</div>
+					<div class="mdl-cell mdl-cell--4-col">
+						<md-input-container class="md-icon-float md-block">
+							<label>租户ID </label> <input ng-model="tenantId" name="tenantId" type="text" required ng-blur="tenantIdVisited=true" ng-focus="tenantIdVisited=false">
+							<div class="help-inline validation-msgs" ng-class="{validationmsg:!deploy.tenantId.$valid}">
+								<span ng-show="( !!deploy.tenantId.$error.required && deploy.tenantId.$touched && tenantIdVisited)">需要租户ID。</span>
+							</div>
+						</md-input-container>
+						<md-input-container class="md-icon-float md-block">
+							<label>资源组 </label> <input ng-model="resourceGroup" type="text" required name="resourceGroup" ng-blur="resourceGroupVisited=true" ng-focus="resourceGroupVisited=false">
+							<div class="help-inline validation-msgs" ng-class="{validationmsg:!deploy.resourceGroup.$valid}">
+								<span ng-show="( !!deploy.resourceGroup.$error.required && deploy.resourceGroup.$touched && resourceGroupVisited)">需要资源组</span>
+							</div>
+						</md-input-container>
+					</div>
+					<div class="mdl-cell mdl-cell--4-col">
+						<md-input-container class="md-icon-float md-block">
+							<label>密钥 </label> <input ng-model="secretKey" type="password" autocomplete="new-password" required name="secretKey" ng-blur="secretKeyVisited=true" ng-focus="secretKeyVisited=false">
+							<div class="help-inline validation-msgs" ng-class="{validationmsg:!deploy.secretKey.$valid}">
+								<span ng-show="( !!deploy.secretKey.$error.required && deploy.secretKey.$touched && secretKeyVisited)">密钥必须。</span>
+							</div>
+						</md-input-container>
+						<md-input-container class="md-icon-float md-block">
+							<label>Acr名称 </label> <input ng-model="acrName" type="text" required  name="acrName" ng-blur="acrNameVisited=true" ng-focus="acrNameVisited=false">
+							<div class="help-inline validation-msgs" ng-class="{validationmsg:!deploy.acrName.$valid}">
+								<span ng-show="( !!deploy.acrName.$error.required && deploy.acrName.$touched && acrNameVisited)">Acr名称必填。</span>
+							</div>
+						</md-input-container>
+					</div>
+				</div>
+				<div layout="row" class="pull-right">
+						<md-button class="mdl-button mdl-js-button btn-primary"
+								ng-disabled="deploy.$invalid" ng-click="authenticateAnddeployToAzure();">部署
+						</md-button>
+				</div>
+				</form>
+				<br><br>
+				<h4 class="gridlistheading broker-heading">
+							代理</h4>
+				
+				<md-input-container>
+					<label>数据库类型</label>
+			      <md-select ng-model="dbType" placeholder="Databroker type" ng-init="dbType='csv'">
+			           <md-option value="csv">CSV</md-option>
+			           <md-option value="zip">Zip</md-option>
+			      </md-select>
+				</md-input-container>
+				<form name="deployCloud">
+				
+				<div ng-show="dbType=='zip'">
+					<md-input-container class="md-icon-float md-block">
+						<label>URL</label> <input type="text" ng-model="brokerURL" required name="brokerlink" ng-blur="brokerlinkVisited=true" ng-focus="brokerlinkVisited=false">
+						<div class="help-inline validation-msgs" ng-class="{validationmsg:!deployCloud.brokerlink.$valid}">
+							<span ng-show="( !!deployCloud.brokerlink.$error.required && deployCloud.brokerlink.$touched && brokerlinkVisited)">URL必需。</span>
+						</div>
+					</md-input-container>
+				</div>
+				<div ng-show="dbType=='zip'" class="borker-row">
+					<div>
+						<label class="disblock">位置映射</label>
+						<div>
+							<input class="md-input" type="text" ng-model="positionM1" required>
+							<input class="md-input" type="text" ng-model="positionM2" required>						
+						</div>
+						<div>
+							<input class="md-input" type="text" ng-model="positionM3" required>
+							<input class="md-input" type="text" ng-model="positionM4" required>						
+						</div>
+					</div>
+					<div>
+						<label class="disblock">场映射</label>
+						<div>
+							<input class="md-input" type="text" ng-model="fieldM1" required>
+							<input class="md-input" type="text" ng-model="fieldM2" required>						
+						</div>
+						<div>
+							<input class="md-input" type="text" ng-model="fieldM3" required>
+							<input class="md-input" type="text" ng-model="fieldM4" required>						
+						</div>
+					</div>
+				</div>
+				
+				<div ng-show="dbType=='csv'" class="db-csv">
+					<div>
+						<label class="disblock">用户名</label>
+						<div>
+							<input class="md-input" type="text" ng-model="csvUsername" required>
+						</div>
+						<label class="disblock">主机</label>
+						<div>
+							<input class="md-input" type="text" ng-model="csvHost" required>
+						</div>
+					</div>
+					<div>
+						<label class="disblock">密码</label>
+						<div>
+							<input class="md-input" type="password" ng-model="csvPassword" required>
+						</div>
+						<label class="disblock">端口</label>
+						<div>
+							<input class="md-input" type="text" ng-model="csvPort" required>
+						</div>
+					</div>
+				</div>
+				
+				</form>
+				</div>			
+				
+				<div class="dialog-btn-container-deploy-to-cloud" ng-show="exportTo=='azure'">
+					<md-button
+						class="mdl-button mdl-js-button btn-secondary"
+						ng-click="handleDismiss()"> 取消 </md-button>
+					<md-button
+						class="mdl-button mdl-js-button btn-primary"
+						ng-click="deployCloudVal()" ng-disabled="!(dbType=='csv' && csvUsername && csvPassword && csvHost && csvPort) && !(dbType=='zip' && brokerURL)"> 数据代理 </md-button>
+						<!-- ng-disabled="deployCloud.$invalid || deploy.$invalid" -->
+				</div>
+				<!-- Deploy To Azure ends -->
+				
+				<!-- Deploy To Rackspace starts -->
+				<div class="mdl-grid mdl-grid--no-spacing deploy-grid" ng-show="exportTo=='rackspace'">
+					<form name="rackspace">
+						<md-input-container class="md-icon-float md-block">
+						<!-- Use floating label instead of placeholder --> <label>VM
+							名称 </label> <input ng-model="vmName" type="text" name="vmName" required ng-blur="vmNameVisited=true" ng-focus="vmNameVisited=false">
+						<div class="help-inline validation-msgs" ng-class="{validationmsg:!rackspace.vmName.$valid}">
+							<span ng-show="( !!rackspace.vmName.$error.required && rackspace.vmName.$touched && vmNameVisited)">VM名称必需。</span>
+						</div> </md-input-container>
+						</form>
+				</div>
+				<div class="dialog-btn-container-deploy-to-cloud" ng-show="exportTo=='rackspace'">
+					<md-button
+						class="mdl-button mdl-js-button btn-secondary"
+						ng-click="handleDismiss()"> 取消 </md-button>
+					<md-button
+						class="mdl-button mdl-js-button btn-primary"
+						ng-click="authenticateAnddeployToAzure()" ng-disabled="!vmName"> 部署 </md-button>
+				</div>
+				<!-- Deploy To Rackspace ends -->
+				
+				<!-- Deploy To Local starts -->
+				<div class="mdl-grid mdl-grid--no-spacing deploy-grid" ng-show="exportTo=='deploylocal'">
+					<form name="deployToLocal">
+						<md-input-container class="md-icon-float md-block">
+							<label>单击此处下载Private Kubernetes Cloud的可部署解决方案包</label>
+							<md-button class="mdl-button mdl-js-button btn-secondary"
+							href="/package/getSolutionZip/{{solutionId}}/{{revisionId}}" target="_blank"> 下载解决方案包</md-button>
+						</md-input-container>
+						<br />
+						<p>更多信息请点击 <a href="" target="_blank">帮助</a></p>
+					</form>
+				</div>
+				<div class="dialog-btn-container-deploy-to-cloud" ng-show="exportTo=='deploylocal'">
+					<md-button
+						class="mdl-button mdl-js-button btn-secondary"
+						ng-click="handleDismiss()"> 取消 </md-button>
+				</div>
+				<!-- Deploy To Local ends -->
+				
+				<!-- Deploy To Whitebox starts -->
+				<div class="mdl-grid mdl-grid--no-spacing deploy-grid" ng-show="exportTo=='whitebox'">
+					<form name="deployToWhitebox">
+						<md-input-container class="md-icon-float md-block">
+							 <strong> 部署到White Box.</strong>
+						</md-input-container>
+						</form>
+				</div>
+				<div class="dialog-btn-container-deploy-to-cloud" ng-show="exportTo=='whitebox'">
+					<md-button
+						class="mdl-button mdl-js-button btn-secondary"
+						ng-click="handleDismiss()"> 取消 </md-button>
+					<md-button
+						class="mdl-button mdl-js-button btn-primary"
+						ng-click="" > 部署 </md-button>
+				</div>
+				<!-- Deploy To Whitebox ends -->
+				
+				
+			</div>
+			</md-dialog-content>
+
+		
+		</md-dialog>
+	</div>
+
+
+	<!--Download Cofirmation Modal -->
+	<div class="md-dialog-container" id="downloadConfirm"
+		style="height: 0;">
+		<md-dialog aria-label="Mango (Fruit)" class="cg-dialog-medium">
+		<form ng-cloak>
+			<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>正在下载 - {{solution.name}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="handleDismiss()">
+				<i class="material-icons">关闭</i> </md-button>
+			</div>
+			</md-toolbar>
+			<md-dialog-content>
+			<div class="md-dialog-content text-center">
+				<div>
+					<span class="checkmark1" aria-hidden="true"></span>
+				</div>
+				<p class="md-text1">
+					感谢您下载 <br /> <span class="wrap_text">{{solution.name}}</span>
+					版本 {{versionId}}
+				</p>
+				<p class="md-text2">
+					您的下载将自动开始。
+					<!-- <br /> 如果没有开始 <a data-target>请点击此处</a> 疑难解答信息 -->
+				</p>
+				<br />
+				<p class="md-text3">
+					如果需要，请将下面的键与修改后的解决方案一起使用 <br />上传到
+					{{$root.siteInstanceName}} 平台。
+				</p>
+				<p>
+					<span class="md-key"><!-- {{secretKey || subscriptionKey}} --></span>
+				</p>
+				<br />
+
+				<button
+					class="mdl-button mdl-js-button btn-secondary"
+					ng-click="handleDismiss()">关闭</button>
+
+
+			</div>
+			</md-dialog-content>
+		</form>
+		</md-dialog>
+	</div>
+
+	<!-- Download Artifact -->
+	<div class="md-dialog-container" id="downloadDialog" style="height: 0;">
+		<md-dialog aria-label="Download Dialog" class="cg-dialog-medium">
+		<form ng-cloak>
+			<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>正在下载 - {{solution.name}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="handleDismiss()">
+				<i class="material-icons">关闭</i> </md-button>
+			</div>
+			</md-toolbar>
+			<md-dialog-content>
+			<div class="md-dialog-content">
+				<p class="wrap_text">请从下面选择任何版本的{{solution.name}}。</p>
+		
+
+				<div class="modal-row1 modal-row-new1" ng-repeat="value in downloadData">
+					<div>
+						<label><span class="font600">版本 {{value.version}}</span> - <span
+							class="txt-orange text-small">最新</span> </label>
+							<div class="md-tooltip-container">
+								<label class="md-downloadlbl1 font600" class="tooltip">文件名:</label>
+								<label class="a-tooltip"><span class="a-tooltipval">{{value.name}} {{value.version}}</span>
+								<span class="a-tooltiptext">{{value.name}} {{value.version}}</span>
+							</label>
+							</div>
+							<label class="downloadlbl2"><span class="font600">上传于
+							</span> - {{value.created | date:'MM/dd/yyyy'}}</label>
+					</div>
+					<md-button class="md-raised mdl-js-button btn-secondary" ng-click="getModelDetails()" href="/api/downloads/{{solution.solutionId}}?artifactId={{value.artifactId}}&revisionId={{revisionId}}&userId={{loginUserID}}&jwtToken={{auth}}">
+						下载
+					</md-button>
+				</div>
+				<!-- <div class="modal-row1">
+											<div>
+												<label><b>版本 1.9</b> </label>
+												<label><b>文件名:</b> - Name-of-solution-V1.9 </label>
+												<label><b>上传于</b> - 05/01/2017</label>
+											</div>
+											<button class="mdl-button mdl-js-button btn-secondary">下载</button>
+										</div>
+										<div class="modal-row1">
+											<div>
+												<label><b>版本：1.7</b></label>
+												<label><b>文件名:</b> - Name-of-solution-V1.7 </label>
+												<label><b>上传于</b> - 01/01/2017</label>
+											</div>
+											<button class="mdl-button mdl-js-button btn-secondary" ng-click = "">下载</button>
+										</div> -->
+			</div>
+
+
+			</md-dialog-content>
+			<md-dialog-actions>
+			<div class="dialog-footer-container1">
+				<span></span>
+				<button ng-click="handleDismiss()"
+					class="mdl-button mdl-js-button mdl-js-ripple-effect btn-secondary text-tranformnone">关闭</button>
+			</div>
+			</md-dialog-actions>
+		</form>
+		</md-dialog>
+	</div>
+	<!-- Modal box end -->
+	
+	
+	<!-- Rating Model Starts  -->
+	<div class="md-dialog-container" id="rateModelPopup" style="height: 0;">
+		<md-dialog aria-label="Rate Model" class="cg-dialog-medium">
+		<form ng-cloak>
+			<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>评价此模型 - {{solution.name}}</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="handleDismiss()">
+				<i class="material-icons">关闭</i> </md-button>
+			</div>
+			</md-toolbar>
+			<md-dialog-content>
+			<div class="md-dialog-content">
+			<div class="text-center"><label class="font600">评价此模型</label></div>
+				<div class="text-center ratethis-container"><jk-rating-stars rating="mlSolutionGetRating.rating"></jk-rating-stars></div>				
+				<div ng-switch="mlSolutionGetRating.rating">
+				<div class="text-center" ng-switch-when="1"><label class="text-small">
+				 讨厌</label></div>
+				<div class="text-center" ng-switch-when="2"><label class="text-small">
+				 不喜欢</label></div>
+				 <div class="text-center" ng-switch-when="3"><label class="text-small">
+				 还可以</label></div>
+				 <div class="text-center" ng-switch-when="4"><label class="text-small">
+				 喜欢</label></div>
+				 <div class="text-center" ng-switch-when="5"><label class="text-small">
+				 很喜欢</label></div>
+			     </div>							
+			<br/>
+			<label class="disblock">查看此模型</label>
+			<textarea class="mdl-textfield__input md-txtarea" type="text" ng-model = "ratingReview"
+			rows="3" id="comment"></textarea>
+										
+			</div>
+			<md-dialog-actions>			
+				<!-- <button ng-click="handleDismiss()"
+					class="mdl-button mdl-js-button mdl-js-ripple-effect btn-secondary text-tranformnone">关闭</button> -->
+				<div class="dialog-footer-container1">
+					<button class="mdl-button mdl-js-button btn-secondary md-button md-ink-ripple" type="button" ng-click="handleDismiss()" data-upgraded=",MaterialButton,MaterialRipple">
+						<span> 取消</span>
+					</button>
+					<button class="mdl-button mdl-js-button btn-primary md-button md-ink-ripple" type="button" ng-click="onItemRating(mlSolutionGetRating.rating)" data-upgraded=",MaterialButton,MaterialRipple">
+						<span> 提交 </span>
+						<div class="md-ripple-container"></div>
+					</button>
+				</div>
+				
+		
+			</md-dialog-actions>
+			</md-dialog-content>
+			
+		</form>
+		</md-dialog>
+	</div>
+	<!-- Rating Model Ends -->
+	
+	<!-- Modal box for approve and reject publish request -->
+			<div class="md-dialog-container" id="publishRequestModal"
+				style="height: 0;">
+				<md-dialog aria-label="Publish Request" class="">
+				<form name='publishRequestForm' ng-cloak novalidate>
+					<md-toolbar>
+					<div class="md-toolbar-tools">
+						<h2 ng-show="requestApprovalModal == 'approve' ">批准请求</h2>
+						<h2 ng-show="requestApprovalModal == 'decline' ">拒绝请求</h2>
+						<span flex></span>
+						<md-button class="md-icon-button" ng-click='closePoup()'>
+						<i class="material-icons">关闭</i> </md-button>
+					</div>
+					</md-toolbar>
+					<md-dialog-content>
+					<div class="md-dialog-content">
+						<div layout="row">
+							<div flex="100">
+								<md-input-container class="md-block"> <span
+									class="font600">您正在 <span
+									ng-show="requestApprovalModal == 'approve' ">批准</span> <span
+									ng-show="requestApprovalModal == 'decline' ">拒绝</span>
+									{{requestedModelName}}的发布请求。
+								</span>
+
+								<p class="peerpara1">请添加备注 (可选).</p>
+								<br />
+								<textarea ng-model="descriptionPop" rows="4"></textarea> </md-input-container>
+							</div>
+						</div>
+					</div>
+					</md-dialog-content>
+					<md-dialog-actions>
+					<div class="dialog-footer-container1">
+						<div>
+							<button ng-click='closePoup()'
+								class="mdl-button mdl-js-button btn-secondary">取消</button>
+						</div>
+						<div>
+							<button ng-click="publishReqeuest(requestApprovalModal)"
+								class="mdl-button mdl-js-button btn-primary">
+								<span ng-show="requestApprovalModal == 'approve' ">批准</span>
+								<span ng-show="requestApprovalModal == 'decline' ">拒绝</span>
+							</button>
+
+						</div>
+					</div>
+					</md-dialog-actions>
+				</form>
+				</md-dialog>
+			</div>
+			<!-- Modal box end -->
+	

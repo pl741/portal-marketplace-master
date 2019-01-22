@@ -1,0 +1,42 @@
+<!--  
+===============LICENSE_START=======================================================
+Acumos Apache-2.0
+===================================================================================
+Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+===================================================================================
+This Acumos software file is distributed by AT&T and Tech Mahindra
+under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+===============LICENSE_END=========================================================
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<section class="description_box" id="breadcrumb-box">
+  <h4>主页</h4>
+  <ol class="breadcrumb">
+    <li><a href="#">主页</a></li>
+    <li><a href="#"></a></li>
+  </ol>
+  </section> 
+<div class="col-md-12">
+	
+<section class="modal-dialog password">
+	<h4 class="modal-header" ng-if="forgotPassword">忘记密码</h4>
+	<h4 class="modal-header" ng-if="expiredPassword">您{{$root.siteInstanceName}}的密码已失效。</h4>
+	<form class="modal-body" name="forgotPswd">		
+		 <div class="form-group">
+			<label for="exampleInputPassword1">用户邮箱ID</label>
+			<input type="email" class="form-control" id="uemail" name="uemail" ng-model="uemail" placeholder="Email ID" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required>
+		</div>
+		  <button type="submit" ng-click="forgotPasswd()" class="btn btn-default replybtn">提交</button>
+	</form>
+</section>
+
+</div> 

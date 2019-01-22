@@ -1,0 +1,951 @@
+<!--  
+===============LICENSE_START=======================================================
+Acumos Apache-2.0
+===================================================================================
+Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+===================================================================================
+This Acumos software file is distributed by AT&T and Tech Mahindra
+under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+===============LICENSE_END=========================================================
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+label {
+	font-weight: normal;
+	font-size: 12px;
+}
+</style>
+<section class="description_box">
+	<div class="">
+		<div class="description-content">
+			<div class="description-content-left">
+				<h4 class="inline-block text-bold">{{solution.name}}</h4>
+				<!-- <h4 class="inline-block text-bold">{{name}}</h4> -->
+				<span>| 版本-2.0 </span>  <span> | <a ui-sref="modelEdit"
+					ng-show="isUser">编辑</a></span>
+			</div>
+			<div class="description-content-right">
+				<span> <i class="fa fa-star" aria-hidden="true"></i> <i
+					class="fa fa-star" aria-hidden="true"></i> <i class="fa fa-star"
+					aria-hidden="true"></i> <i class="fa fa-star" aria-hidden="true"></i>
+					<i class="fa fa-star-o" aria-hidden="true"></i>
+				</span> <span><i class="fa fa-comment" aria-hidden="true"></i><a
+					data-target="#">10条评论</a></span> <span> <a data-target="#">撰写评论</a></span> 
+					<span><i class="fa fa-eye" aria-hidden="true"></i>176次阅读</span>
+					<span><i class="fa fa-download" aria-hidden="true"></i>6次下载</span>
+			</div>
+			<div class="clearfix"></div>
+			<div>
+				<ol class="breadcrumb col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<li><a data-target="#">主页</a></li>
+					<li>{{solution.name}}</li>
+				</ol>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</section>
+
+<section class="">
+
+	<div class="tab-panel">
+		<!-- Nav tabs -->
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a
+				data-target="#workflow" aria-controls="home" role="tab"
+				data-toggle="tab"><span class="onlymob"><img
+						src="images/Description.png" alt="" title="" /></span>工作流</a></li>
+			<li role="presentation"><a data-target="#description"
+				aria-controls="home" role="tab" data-toggle="tab"><span
+					class="onlymob"><img src="images/Description.png" alt=""
+						title="" /></span>描述</a></li>
+			<li role="presentation"><a data-target="#profile"
+				aria-controls="profile" role="tab" data-toggle="tab"><span
+					class="onlymob"><img src="images/Signature.png" alt=""
+						title="" /></span>签名</a></li>
+			<li role="presentation"><a data-target="#messages"
+				aria-controls="messages" role="tab" data-toggle="tab"><span
+					class="onlymob"><img src="images/Documents.png" alt=""
+						title="" /></span>文档</a></li>
+			<li role="presentation"><a data-target="#settings"
+				aria-controls="settings" role="tab" data-toggle="tab"><span
+					class="onlymob"><img src="images/Version_History.png" alt=""
+						title="" /></span>历史版本</a></li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<!-- vertical tab panel -->
+			<div role="tabpanel" class="tab-pane active" id="workflow">
+				<div class="workflow">
+					<div class="workflow-left">
+						<!-- required for floating -->
+						<!-- Nav tabs -->
+						<ul class="nav nav-tabs tabs-left">
+
+							<!-- <li	ng-repeat="item in workflowJSON">
+							<a data-target="#{{item.workID}}"
+								data-toggle="tab"> 
+								<i class="fa fa-upload" aria-hidden="true"></i>
+								<i class="fa fa-check-circle-o green" aria-hidden="true"></i>
+								<i ng-show="{{item.completedStatus[0].isCompleted == true}}" class="fa fa-check-circle-o green"></i>
+								<i ng-show="{{item.completedStatus[0].isCompleted == false}}" class="fa fa-upload"></i>
+								{{item.workName}}
+								<ul ng-show="{{item.completedStatus[0].taskCompleted && item.completedStatus[0].taskPending != null}}">
+									<li class="green">{{item.completedStatus[0].taskCompleted}}</li>
+									<li class="blue">{{item.completedStatus[0].taskPending}}</li>
+								</ul>
+								<ul ng-show="{{item.completedStatus[0].otherTask != null}}">
+									<li class="orange">{{item.completedStatus[0].otherTask}}</li>
+								</ul>
+								
+							</a>
+						</li> -->
+
+							<li class="active"><a data-target="#onboard"
+								data-toggle="tab"> <i class="fa fa-upload"
+									aria-hidden="true"></i> <i class="fa fa-check-circle-o green"
+									aria-hidden="true"></i>上传
+									<ul>
+										<li class="green">3 个已完成</li>
+										<li class="blue">0 个在等待</li>
+									</ul>
+							</a></li>
+							<li><a data-target="#share" data-toggle="tab"> <i
+									class="fa fa-share-alt" aria-hidden="true"></i>与团队分享
+									<ul>
+										<li>与6位协作者共享</li>
+									</ul>
+							</a></li>
+							<li><a data-target="#company" data-toggle="tab"> <i
+									class="fa fa-upload" aria-hidden="true"></i>发布到公司商城
+									<ul>
+										
+										<li class="green" ng-if="descUpdated && tagUpdated">2 条已完成</li>
+										<li class="green" ng-if="descUpdated && !tagUpdated">1 条已完成</li>
+										<li class="green" ng-if="!descUpdated && tagUpdated">1 条已完成</li>
+										
+										<li class="green" ng-if="!descUpdated && !tagUpdated">0 条已完成</li>
+										<li class="blue"  ng-if="!descUpdated && !tagUpdated">8 条正在等待</li>
+									</ul>
+							</a></li>
+							<li><a data-target="#catalog" data-toggle="tab"> <i
+									class="fa fa-upload" aria-hidden="true"></i>发布到 ONAP 分类下
+									<ul>
+										<li class="orange">你必须先发布到公司商城中</li>
+									</ul>
+							</a></li>
+							<li><a data-target="#public" data-toggle="tab"> <i
+									class="fa fa-upload" aria-hidden="true"></i>发布到公共商城
+									<ul>
+										<li class="orange">未启动</li>
+									</ul>
+							</a></li>
+							<li><a data-target="#cloud" data-toggle="tab"> <i
+									class="fa fa-cloud-upload" aria-hidden="true"></i>导出/部署到云端
+									<ul>
+										<li class="orange">未启动</li>
+									</ul>
+							</a></li>
+							<li><a data-target="#delete" data-toggle="tab"><i
+									class="fa fa-trash" aria-hidden="true"></i>删除模型</a></li>
+						</ul>
+					</div>
+					<div class="workflow-right">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<!--  id="{{wItem.workID}}" ng-repeat="wItem in workflowJSON" -->
+							<div class="tab-pane active " id="onboard">
+								<!-- timeline start -->
+								<div class="timeline">
+									<div class="timeline-centered">
+										<!-- <article class="timeline-entry" ng-repeat="item in workflowJSON">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon bg-success" ng-show="{{item.taskDetails[0].status == 'completed'}}">
+														<span class="entypo-feather fa fa-check"></span>
+													</div>
+													<div class="timeline-icon" ng-show="{{item.taskDetails[0].status == 'In progress'}}">
+														<span class="entypo-suitcase">{{item.taskDetails[0].id}}</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															{{item.taskDetails[0].taskName}}
+															| <span class="green">Completed on 
+															{{item.taskDetails[0].completedDate}}</span>
+														</h2>
+														<p> {{item.taskDetails[0].description}}</p>
+													</div>
+												</div>
+											</article>
+										 -->
+
+
+										<article class="timeline-entry">
+											<div class="timeline-entry-inner">
+												<div class="timeline-icon bg-success">
+													<span class="entypo-feather fa fa-check"></span>
+												</div>
+												<div class="timeline-label">
+													<h2>
+														上传 | <span class="green">完成于
+															{{solution.created | date:'MM/dd/yyyy' }}</span>
+													</h2>
+													<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+												</div>
+											</div>
+										</article>
+
+										<article class="timeline-entry">
+											<div class="timeline-entry-inner">
+												<div class="timeline-icon bg-success">
+													<span class="entypo-feather fa fa-check"></span>
+												</div>
+												<div class="timeline-label">
+													<h2>
+														已上传工具| <span class="green">
+														在 05/27/2017 完成</span>
+													</h2>
+													<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+												</div>
+											</div>
+										</article>
+										<article class="timeline-entry">
+											<div class="timeline-entry-inner">
+												<div class="timeline-icon bg-success">
+													<span class="entypo-feather fa fa-check"></span>
+												</div>
+												<div class="timeline-label">
+													<h2>
+														已生成 TOSCA 模型 | <span class="green">完成于 {{solution.created | date:'MM/dd/yyyy' }}</span>
+													</h2>
+													<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+												</div>
+											</div>
+										</article>
+									</div>
+								</div>
+								<!-- timeline end -->
+							</div>
+
+							<div class="tab-pane" id="share">分享</div>
+
+							<div class="tab-pane" id="company">
+								<div>
+									<div class="timeline">
+										<div class="timeline-centered">
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+												
+													<div class="timeline-icon bg-success" ng-if="descUpdated">
+														<span class="entypo-feather fa fa-check"></span>
+													</div>  
+													
+													<div class="timeline-icon" ng-if="!descUpdated">
+														<span class="entypo-suitcase">1</span>
+													</div>
+													
+													<div class="timeline-label" data-toggle="modal"
+														data-target="#editDesc">
+														<h2>
+															模型描述 | 
+															<span class="green" ng-if="descUpdated"> 完成于 {{solution.modified | date }}</span>
+															<span class="orange" ng-if="!descUpdated">进行中</span>
+															
+														</h2>
+														<p>{{solution.description}}</p>
+													</div>
+
+													<!-- Modal -->
+													<div class="modal fade" id="editDesc" role="dialog">
+														<div class="modal-dialog">
+															<!-- Modal content-->
+															<div class="modal-content">
+																<div class="modal-header">
+																	<button type="button" class="close"
+																		data-dismiss="modal">&times;</button>
+																	<h4 class="modal-title">编辑细节</h4>
+																</div>
+																<div class="modal-body">
+																	<form class="form-horizontal" role="form">
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3">标题</label>
+																			<div class="col-sm-10">
+																				<input type="text" class="form-control"
+																					value="Model Description" disabled="disabled" />
+																			</div>
+																		</div>
+																		<br />
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3">描述</label>
+																			<div class="col-sm-10">
+																				<textarea class="col-sm-10"
+																					ng-model="solution.description">{{solution.description}}
+																				</textarea>
+																			</div>
+																		</div>
+																	</form>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-default"
+																		data-dismiss="modal" ng-click="updateSolution();">保存</button>
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+											</article>
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">2</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															添加文档 | <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据。</p>
+														<input type="checkbox" /> <label>使用在公司商城中你获取到的文档</label>
+													</div>
+												</div>
+											</article>
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+												
+													<div class="timeline-icon bg-success" ng-if="tagUpdated">
+														<span class="entypo-feather fa fa-check"></span>
+													</div> 
+													
+													<div class="timeline-icon" ng-if="!tagUpdated">
+														<span class="entypo-suitcase">3</span>
+													</div>
+													<div class="timeline-label" data-target="#editTag"
+														data-toggle="modal">
+														<h2>
+															添加标签| <span class="orange">进行中</span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label>使用你在公司商城中你获取的标签</label>
+													</div>
+													<div class="modal fade" id="editTag" role="dialog">
+														<div class="modal-dialog">
+															<!-- Modal content-->
+															<div class="modal-content">
+																<div class="modal-header">
+																	<button type="button" class="close"
+																		data-dismiss="modal">&times;</button>
+																	<h4 class="modal-title">编辑标签</h4>
+																</div>
+																<div class="modal-body">
+																	<form class="form-horizontal" role="form">
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3">标题</label>
+																			<div class="col-sm-10">
+																				<input type="text" class="form-control"
+																					value="Edit Tags" disabled="disabled" />
+
+																			</div>
+																		</div>
+																		<br />
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3">类别</label>
+																			<div class="col-sm-10">
+																				<div class="radio">
+																					<label><input type="radio" name="optradio"
+																						ng-model="categoryname" value="CL">
+																						分类</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="optradio"
+																						ng-model="categoryname" value="PR">
+																						预测</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="optradio"
+																						ng-model="categoryname" value="RG">回归</label>
+																				</div>
+																			</div>
+																		</div>
+<br />
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3">工具类别</label>
+																			<div class="col-sm-10">
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="CP">
+																						组成策略</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="H2">
+																						H2O</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="RC">RCloud</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="SK">Scikit-Learn</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="TF">TensorFlow</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="TK">工具类别</label>
+																				</div>
+																				
+																			</div>
+																		</div>
+
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3">标签</label>
+																			<div class="col-sm-10">
+																				<tags-input ng-model="tags"></tags-input>
+																			</div>
+																		</div>
+																	</form>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-default"
+																		data-dismiss="modal" ng-click="saveTags()">保存标签</button>
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+
+
+											</article>
+
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">4</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															添加签名 | <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label>使用你在公司商城获取的签名</label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">5</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															添加文档 | <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label>使用你在公司商城中获取的文档</label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">6</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															添加历史版本 | <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label>使用你在公司商城获取的版本</label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">7</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															开始安全扫描| <span class="orange">进行中</span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label>使用你在公司商城中获取的安全策略</label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">8</span>
+													</div>
+													<div class="timeline-label">
+														<h2>向公司商城中发布代码</h2>
+														<button ng-click="publishtoMarket('OR')">提交发布</button>
+													</div>
+												</div>
+											</article>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="tab-pane" id="catalog">ONAP</div>
+
+							<!-- Publish to public market place -->
+							<div class="tab-pane" id="public">
+								<div class="timeline">
+										<div class="timeline-centered">
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon bg-success" ng-if="descUpdated">
+														<span class="entypo-feather fa fa-check"></span>
+													</div>
+													
+													<div class="timeline-icon" ng-if="!descUpdated">
+														<span class="entypo-suitcase">1</span>
+													</div>
+													
+													<div class="timeline-label" data-toggle="modal"
+														data-target="#editDesc">
+														<h2>
+															模型描述 | <span class="green"> 完成于 {{solution.modified | date }}</span>
+														</h2>
+														<p>{{solution.description}}</p>
+													</div>
+
+													<!-- Modal -->
+													<div class="modal fade" id="editDesc" role="dialog">
+														<div class="modal-dialog">
+															<!-- Modal content-->
+															<div class="modal-content">
+																<div class="modal-header">
+																	<button type="button" class="close"
+																		data-dismiss="modal">&times;</button>
+																	<h4 class="modal-title"> 编辑细节 </h4>
+																</div>
+																<div class="modal-body">
+																	<form class="form-horizontal" role="form">
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3"> 标题</label>
+																			<div class="col-sm-10">
+																				<input type="text" class="form-control"
+																					value="Model Description" disabled="disabled" />
+																			</div>
+																		</div>
+																		<br />
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3"> 描述 </label>
+																			<div class="col-sm-10">
+																				<textarea class="col-sm-10"
+																					ng-model="solution.description">{{solution.description}}
+																				</textarea>
+																			</div>
+																		</div>
+																	</form>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-default"
+																		data-dismiss="modal" ng-click="updateSolution();"> 保存 </button>
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+											</article>
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">2</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															 添加文档 | <span class="orange"> 进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label> 使用你在公司商城中获取的文档</label>
+													</div>
+												</div>
+											</article>
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon" ng-if="!tagUpdated">
+														<span class="entypo-suitcase">3</span>
+													</div>
+													<div class="timeline-icon bg-success" ng-if="tagUpdated">
+														<span class="entypo-feather fa fa-check"></span>
+													</div>
+													
+													<div class="timeline-label" data-target="#editTag"
+														data-toggle="modal">
+														<h2>
+															添加标签 | <span class="orange"> 进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label> 使用你在公司商城中获取的标签</label>
+													</div>
+													<div class="modal fade" id="editTag" role="dialog">
+														<div class="modal-dialog">
+															<!-- Modal content-->
+															<div class="modal-content">
+																<div class="modal-header">
+																	<button type="button" class="close"
+																		data-dismiss="modal">&times;</button>
+																	<h4 class="modal-title"> 编辑标签</h4>
+																</div>
+																<div class="modal-body">
+																	<form class="form-horizontal" role="form">
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3"> 标题</label>
+																			<div class="col-sm-10">
+																				<input type="text" class="form-control"
+																					value="Edit Tags" disabled="disabled" />
+
+																			</div>
+																		</div>
+																		<br />
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3"> 类别</label>
+																			<div class="col-sm-10">
+																				<div class="radio">
+																					<label><input type="radio" name="optradio"
+																						ng-model="categoryname" value="CL">
+																						 分类</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="optradio"
+																						ng-model="categoryname" value="PR">
+																						 预测</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="optradio"
+																						ng-model="categoryname" value="RG"> 回归</label>
+																				</div>
+																			</div>
+																		</div>
+<br />
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3"> 工具类别</label>
+																			<div class="col-sm-10">
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="CP">
+																						 组成策略</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="H2">
+																						H2O</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="RC">RCloud</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="SK">Scikit-Learn</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="TF">TensorFlow</label>
+																				</div>
+																				<div class="radio">
+																					<label><input type="radio" name="toolkitradio"
+																						ng-model="toolkitname" value="TK"> 工具类别</label>
+																				</div>
+																				
+																			</div>
+																		</div>
+
+																		<div class="form-group">
+																			<label class="col-sm-2 control-label"
+																				for="inputEmail3">标签</label>
+																			<div class="col-sm-10">
+																				<tags-input ng-model="tags"></tags-input>
+																			</div>
+																		</div>
+																	</form>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-default"
+																		data-dismiss="modal" ng-click="saveTags()">保存标签</button>
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+
+
+											</article>
+
+
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">4</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															添加签名| <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label>使用你在公司商城中获取的签名</label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">5</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															添加文档 | <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示关于此项工作的一些信息，比如如何完成本任务及完成任务所需数据</p>
+														<input type="checkbox" /> <label>使用你在公司商城中获取的文档</label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">6</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															添加历史版本| <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示与此特定任务相关的一些信息，例如如何收集完成此任务所需的数据。</p>
+														<input type="checkbox" /> <label>使用你在公司商城中获取的版本</label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">7</span>
+													</div>
+													<div class="timeline-label">
+														<h2>
+															开始安全扫描| <span class="orange">进行中 </span>
+														</h2>
+														<p>可以显示与此特定任务相关的一些信息，例如如何收集完成此任务所需的数据。</p>
+														<input type="checkbox" /> <label>使用你在公司商城中获取的安全策略 </label>
+													</div>
+												</div>
+											</article>
+											<article class="timeline-entry">
+												<div class="timeline-entry-inner">
+													<div class="timeline-icon">
+														<span class="entypo-suitcase">8</span>
+													</div>
+													<div class="timeline-label">
+														<h2>发布代码到公司商城中</h2>
+														<button ng-click="publishtoMarket('PB')">提交发布</button>
+													</div>
+												</div>
+											</article>
+										</div>
+									</div>
+							
+							</div>
+							<div class="tab-pane" id="cloud">公开的</div>
+							<div class="tab-pane" id="delete">公开的</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<!-- vertical tab panel end-->
+
+			<div role="tabpanel" class="tab-pane" id="description">
+				<div class="detailsummary">
+					<p class="headings">关于模型的引导介绍</p>
+					<p>{{solution.description}}</p>
+					<p>Lorem Ipsum is simply dummy text of the printing and
+						typesetting industry. Lorem Ipsum has been the industry's standard
+						dummy text ever since the 1500s, when an unknown printer took a
+						galley of type and scrambled it to make a type specimen book.</p>
+				</div>
+				<div class="detailsummary">
+					<p class="headings">图片和视频</p>
+					<div class="imagegallery">
+						<img src="images/imagegallery.jpg" alt="" title="" />
+					</div>
+				</div>
+				<div class="detailsummary">
+					<p class="headings">例子</p>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="profile">
+				<div class="detailsummary">
+					<p class="headings">输入</p>
+					<p>*（要求）图片数据API地址，Web(http/https) Url,二进制图片数据，base64编码数据或者数据API地址/web URLs数组</p>
+					<p>.**（可选）**输出图片路径，如果输入为数组，输出路径必须为对应的大小的一个数组</p>
+				</div>
+				<div class="detailsummary">
+					<p class="headings">输出</p>
+					<p>输出图片路径</p>
+					<p>注意：由于算法初始化，本算法的初次调用会比顺序调用耗时更多。接下来的调用会显著变快。</p>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="messages">
+				<div class="detailsummary">
+					<p class="headings">
+						支持文档
+						<button class="btn replybtn pull-right">添加新的</button>
+						<span class="clearfix"></span>
+					</p>
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th></th>
+									<th>文件夹/文档</th>
+									<th>版本 </th>
+									<th>修改于</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row"><i class="fa fa-file-word-o"
+										aria-hidden="true"></i></th>
+									<td><a data-target="#">文件名 01</a></td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i></td>
+								</tr>
+								<tr>
+									<th scope="row"><i class="fa fa-file-pdf-o"
+										aria-hidden="true"></i></th>
+									<td><a data-target="#">文件名 02</a></td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i></td>
+								</tr>
+								<tr>
+									<th scope="row"><i class="fa fa-file-word-o"
+										aria-hidden="true"></i></th>
+									<td><a data-target="#">文件名 03</a></td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i></td>
+								</tr>
+								<tr>
+									<th scope="row"><i class="fa fa-file-word-o"
+										aria-hidden="true"></i></th>
+									<td><a data-target="#">文件名 04</a></td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i></td>
+								</tr>
+								<tr>
+									<th scope="row"><i class="fa fa-folder" aria-hidden="true"></i></th>
+									<td><a data-target="#">文件夹名 01</a></td>
+									<td>---</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i></td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="settings">
+				<div class="detailsummary">
+					<p class="headings">
+						解决方案版本历史
+						<button class="btn replybtn pull-right">添加新的</button>
+						<span class="clearfix"></span>
+					</p>
+					<div class="table-responsive">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>版本名称</th>
+									<th>版本</th>
+									<th>修改</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><a data-target="#">版本名称 01</a> | 最近的</td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i> <a
+										data-target="#">查看详情</a></td>
+								</tr>
+								<tr>
+									<td><a data-target="#">版本名称 02</a></td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i> <a
+										data-target="#">查看详情</a></td>
+								</tr>
+								<tr>
+									<td><a data-target="#">版本名称 03</a></td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i> <a
+										data-target="#">查看详情</a></td>
+								</tr>
+								<tr>
+									<td><a data-target="#">版本名称 04</a></td>
+									<td>v1.0</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i> <a
+										data-target="#">查看详情</a></td>
+								</tr>
+								<tr>
+									<td><a data-target="#">版本名称 05</a></td>
+									<td>---</td>
+									<td>05/21/2017</td>
+									<td><i class="fa fa-download" aria-hidden="true"></i> <a
+										data-target="#">查看详情</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</section>
+
+

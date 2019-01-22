@@ -1,0 +1,132 @@
+<!--  
+===============LICENSE_START=======================================================
+Acumos Apache-2.0
+===================================================================================
+Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+===================================================================================
+This Acumos software file is distributed by AT&T and Tech Mahindra
+under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+===============LICENSE_END=========================================================
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+
+							  <md-dialog aria-label="Mango (Fruit)" class="cg-dialog-sign_in" id="sign-in-dialog">
+								  <form name="userForm" ng-cloak novalidate autocomplete="off">
+									<md-toolbar>
+									  <div class="md-toolbar-tools">
+										<h2>登录</h2>
+										<span flex></span>
+										 <md-button class="md-icon-button" ng-click="handleDismiss()">
+										  <md-icon class="material-icons btn-close-dialog" alt="Close" title="Close">关闭</md-icon>
+										</md-button>
+									  </div>
+									</md-toolbar>
+									<md-dialog-content>
+									  <div class="md-dialog-content">										
+										<label class="sign-in-lbl1 disblock">已有账号?</label>
+										<div class="help-inline" ng-show="userVerificationPending">
+											<span style="color: #ff0000;">
+												您的帐户验证已失效。点击<a ng-click="regenerateVerification($event)">此处</a>重新生成验证邮件。
+											</span>
+										</div>
+										<div class="help-inline" ng-show="userIdDisabled">
+											<span style="color: #ff0000;">
+												您的账户不存在。
+											</span>
+										</div>
+										<div class="mdl-grid mdl-grid--no-spacing">
+										  <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet">
+										  		 <md-input-container class="md-icon-float md-block">
+												      <!-- Use floating label instead of placeholder -->
+												      <label>用户名或电子邮件ID</label>
+												      <md-icon class="name"><span class="icon-user" alt="User" title="User"></span></md-icon>
+												      <input class="signin-control" name="userName" ng-model="modalData.name" type="text" autocomplete="off" required>
+												      <div class="help-inline validation-msgs"
+															ng-class="{validationmsg:!userForm.userName.$valid}">
+															<span
+																ng-show="!!(userForm.userName.$dirty && userForm.userName.$error.required)">请输入有效的用户名或电子邮件ID
+															</span>
+													  </div>
+												 </md-input-container>
+												 <md-input-container class="md-icon-float md-block">
+												      <!-- Use floating label instead of placeholder -->
+												      <label>密码</label>
+												      <md-icon class="name"><span class="icon-password" alt="Password" title="Password"></span></md-icon>
+												      <input class="signin-control" name="userPass" ng-model="modalData.value" type="password" autocomplete="off" required>
+												      <div class="help-inline validation-msgs"
+														ng-class="{validationmsg:!userForm.userPass.$valid}">
+													    <span
+															ng-show="!!(userForm.userPass.$dirty && userForm.userPass.$error.required)">请输入密码
+														</span>
+
+													</div>
+												 </md-input-container>
+												 <div>
+													 <md-checkbox ng-model="modalData.cb1" aria-label="Checkbox 1">记住账号</md-checkbox>
+												</div>
+												<br />
+												<div>
+												<div class="help-inline validation-msgs">
+								<span ng-show="enterLoginCredentials"
+									style="color: #ff0000">用户名和密码不匹配。
+								</span>
+							</div>
+							<div class="help-inline">
+								<span ng-show="userPassInvalid" style="color: #ff0000;">用户名和密码不匹配。
+								</span>
+							</div>
+							<div class="help-inline">
+								<span ng-show="userPassBlocked" style="color: #ff0000;">{{userBlockedMessage}}</span>
+							</div>
+													<!--<md-button class="mdl-button mdl-js-button mdl-button--raised btn-signin btn-fullwidth btn-primary"
+													
+													ng-click="signIn()">Sign in</md-button> -->
+													<md-button type="submit" class="mdl-button mdl-js-button mdl-button--raised btn-signin btn-fullwidth btn-primary" ng-disabled="userForm.userName.$invalid || userForm.userPass.$invalid" ng-click = "signin()" alt="Sign in" title="Sign in">登录</md-button>
+												</div>
+												<div>
+													<button class="mdl-button mdl-js-button btn-fullwidth2 btn-forgotpass"
+                                                    data-target ng-click="forgotPassword($event)">忘记密码</button>
+                                                    <!-- ui-sref="forgotPswd" ng-click="$ctrl.handleDismiss()">Forgot Password</button> -->
+												</div>
+										  </div>
+										  <div class="mdl-cell mdl-cell--1-col posrel mdl-cell--1-col-tablet">
+										  		<div class="signinseperator"><span class="or_span">其他登录方式</span></div>
+										  </div>
+										  <div class="mdl-cell mdl-cell--5-col mdl-cell--3-col-tablet">
+										  	<div class="socbtncontainer">
+										  		<button disabled class="mdl-button mdl-js-button mdl-js-ripple-effect socbtn" ng-click='signinAuthenticate("github")' alt="Sign In with Github" title="Sign In with Github"><span class="socbtnicon"><span class="github-icon"></span></span><span class="soctext">Github</span></button>
+										  		<button disabled class="mdl-button mdl-js-button mdl-js-ripple-effect socbtn" ng-click='signinAuthenticate("facebook")' disabled alt="Sign In with Facebook" title="Sign In with Facebook"><span class="socbtnicon"><span class="facebook-icon"></span></span><span class="soctext">Facebook</span></button>
+										  		<button disabled class="mdl-button mdl-js-button mdl-js-ripple-effect socbtn" ng-click='signinAuthenticate("google")' alt="Sign In with Google" title="Sign In with Google"><span class="socbtnicon"><span class="google-icon"></span></span><span class="soctext">谷歌</span></button>
+										  		<button disabled class="mdl-button mdl-js-button mdl-js-ripple-effect socbtn" ng-click='signinAuthenticate("linkedin")' disabled alt="Sign In with LinkedIn" title="Sign In with LinkedIn"><span class="socbtnicon"><span class="linkedin-icon"></span></span><span class="soctext">LinkedIn</span></button>
+										  	</div>
+										  	<p class="signintext">
+												点击上面的任何一个即表示您同意我们的<a ui-sref="termsCondition" ng-click="handleDismiss()">条款和协议以及隐私政策。</a>
+											</p>
+										  </div>
+										</div>
+										<hr />
+										 <div ng-hide="$root.isSignUp.enabled==='false'" layout="row" layout-xs="column" class="signupmodalfooter">
+									     <div>
+									     	<label class="text-bold">{{$root.siteInstanceName}}新用户?</label>
+											<span class="disblock">立即注册以使用我们的所有服务</span>
+									     </div>
+									      <span flex></span>									     
+									      <md-button class="mdl-button mdl-js-button mdl-js-ripple-effect btn-secondary btn-signup" ng-click="$ctrl.handleDismiss();$root.showAdvancedSignup();" alt="Sign up" title="Sign up">
+									        注册
+									      </md-button>
+									    </div>								
+									  </div>
+									</md-dialog-content>
+									
+								  </form>
+								</md-dialog>

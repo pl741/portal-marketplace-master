@@ -1,0 +1,98 @@
+<!--  
+===============LICENSE_START=======================================================
+Acumos Apache-2.0
+===================================================================================
+Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+===================================================================================
+This Acumos software file is distributed by AT&T and Tech Mahindra
+under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+This file is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+===============LICENSE_END=========================================================
+-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<footer>
+		 <div class="home-footer">
+			<section>
+				<div>
+					<div class="heading">
+					    <span class="footer-logo"><img src="../images/footer_logo.png" / alt="" title="Acumos"></span>
+						<!-- <span class="footer-logo"><img ng-src="data:image/PNG;base64,{{$root.footerImage}}" /></span> -->
+					</div>
+					<ul>
+						<li ng-init="showmore=false">{{$root.siteInstanceName}} 是一个用于开发，培训，共享和部署AI模型的开源平台。它使数据科学家能够转向以AI为中心的软件生产流程。 {{$root.siteInstanceName}} 的核心是人工智能协作生态系统，其中模型经过训练 <a class="gray text-bold" ng-show="showmore==false" href="" ng-click='showmore=true' >更多..</a><span ng-show="showmore">并评估他们成功分析数据集的能力，并选择最佳的工作模型。</span></li>
+						<li ng-show="showmore">{{$root.siteInstanceName}} 是建模语言，工具包与运行时基础架构或云服务无关的。它是一个完整的系统，以便携式，容器化的微服务形式打包，共享，许可和部署AI模型。{{$root.siteInstanceName}} Design Studio可用于将多个模型以及数据转换工具，过滤器和输出适配器链接在一起，形成完整的端到端解决方案，然后可以将其保存为复合解决方案。{{$root.siteInstanceName}} AI商场目录中包含有关可重复使用的AI模型和完全集成的解决方案的许可和执行要求的信息，可以轻松搜索，使模型选择变得简单。</li>
+						<li ng-show="showmore">平台的源代码 {{$root.siteInstanceName}} 本身在OSI批准的开源许可下可用，因此在任何方面都可以很容易地适应新的开发工具包，私有数据源和数据流以及自定义的运行环境。
+						<a class="gray text-bold" href="" ng-click='showmore=false;'>显示较少</a></li>
+					</ul>
+				</div>
+				<div>
+					<div class="heading">
+						<span>快速链接</span>
+					</div>
+					<ul class="quicklinks">
+						<li><i class="fas fa-angle-right"></i><a ui-sref="home" ng-click="$root.parentActive = ''">主页</a></li>
+						<li><i class="fas fa-angle-right"></i><a ui-sref="marketPlace">商城</a></li>
+						<!-- <li><a ui-sref="manageModule">Manage my models </a></li> -->
+						<li ng-if="$root.enableOnBoarding"><i class="fas fa-angle-right"></i><a ui-sref="modularResource">模型者资源</a></li>
+						<!-- <li><a ui-sref="designStudio">Design Studio</a></li> -->
+						<li><i class="fas fa-angle-right"></i><a ui-sref="termsCondition">条款和协议</a></li>
+						<li><i class="fas fa-angle-right"></i><a href="{{docUrl}}" target="_blank">文档</a></li>
+					</ul>
+				</div>
+				<div>
+					<div class="heading">
+						<span>关注我们</span>
+					</div>
+					<ul>
+						马上
+					</ul>
+					<ul class="social-icons">
+						<li>
+							<i class="fab fa-facebook-f" aria-hidden="true" title="facebook"></i>
+						</li>
+						<li>
+							<i class="fab fa-linkedin-in" aria-hidden="true" title="linkedin"></i>
+						</li>
+						<li>
+							<i class="fab fa-google-plus-g" aria-hidden="true" title="Google-plus"></i>
+						</li>
+						<li>
+							<i class="fab fa-github" aria-hidden="true" title="Github"></i>
+						</li>
+						<li>
+							<i class="fab fa-twitter" aria-hidden="true" title="Twitter"></i>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<div class="heading">
+						<span>联系信息</span>
+					</div>
+					<ul class="contact-info" data-ng-init="getCmsfooterContactInfo()" ng-bind-html="contactInfo">
+					</ul>
+				</div>
+			</section>
+			<div class="clearfix"></div>
+			<div class="copy-right">
+				<ul>
+					<li>LF Projects，LLC使用的各种商标，有关我们商标的隐私、反托拉斯政策，行为准则和使用条款，请单击下面的链接或访问<a href="https://www.lfprojects.org">www.lfprojects.org</a>.
+					<br>
+					<a href="https://lfprojects.org/policies/terms-of-use/">使用条款</a> | <a href="https://lfprojects.org/policies/privacy-policy/">隐私政策</a> | <a href="https://lfprojects.org/policies/code-of-conduct/">行为准则</a> | <a href="https://lfprojects.org/policies/trademark-policy/">商标政策</a> | <a href="https://lfprojects.org/policies/antitrust-policy/">反垄断政策</a></li>
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+			<div class="build-info">
+				<small>版本: {{versionNumber}}</small>
+			</div>
+		</div>
+		
+		</footer>
